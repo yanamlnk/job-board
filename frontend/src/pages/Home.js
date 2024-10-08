@@ -1,11 +1,15 @@
 import React from "react";
-import Button from "../components/button";
-
+import Article from "../components/Article";
+import "../styles/Home.css";
 function Home() {
   return (
-    <>
-      <Button />
-    </>
+    <div className={"home"}>
+      <div className={"container_articles"}>
+        <Article />
+        <Article />
+        <Article />
+      </div>
+    </div>
   );
 }
 export default Home;
