@@ -27,7 +27,7 @@ db.connect((err) => {
 
 // Route de test pour vérifier la connexion au backend
 app.get("/api/test", (req, res) => {
-  res.json({ message: "Connexion réussie au backend!" });
+  res.json({ message: "Youhou" });
 });
 
 // Démarrer le serveur
