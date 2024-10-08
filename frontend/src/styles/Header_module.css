@@ -1,0 +1,24 @@
+header {
+    background-color: #bfbfbf;
+    padding: 10px;
+    border-bottom: 3px solid #333;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  button {
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #ddd;
+  }
+  
+  img {
+    height: 50px;
+  }
