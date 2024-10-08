@@ -1,7 +1,7 @@
 import React from "react";
-import "../styles/Article_Module.css";
+import "../styles/Advertisement_Module.css";
 
-function Article() {
+function Advertisement() {
   // Fonction pour gérer le clic et tester la connexion avec le backend
   const handleLearnMoreClick = () => {
     fetch("http://localhost:3001/api/test") // Remplace l'URL par celle de ton backend
@@ -21,7 +21,7 @@ function Article() {
 
   return (
     <>
-      <div className={"article"}>
+      <div className={"advertisement"}>
         <p>company</p>
         <div className={"container_title_button"}>
           <h1>Title</h1>
@@ -35,4 +35,4 @@ function Article() {
     </>
   );
 }
-export default Article;
+export default Advertisement;
