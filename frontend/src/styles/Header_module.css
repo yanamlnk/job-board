@@ -1,0 +1,31 @@
+header {
+    background-color: #bfbfbf;
+    padding: 10px;
+    border-bottom: 3px solid #333;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    margin: -10px 
+  }
+  
+  header button {
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #ddd;
+  }
+
+  .navigation-buttons {
+    display: flex;
+    justify-content: end;
+  }
+  
+  header img {
+    height: 50px;
+    margin-right: auto;
+  }
+  .material-symbols-outlined {
+    font-size: 50px;    
+  }
