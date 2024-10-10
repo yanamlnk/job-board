@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Advertisement from "../components/Advertisement";
+import Advertisement from "../components/advertisement";
 import "../styles/Home.css";
 import Header from "../components/Header";
 
@@ -13,9 +13,10 @@ function Home() {
       .catch((error) => console.error("Erreur:", error));
   }, []);
 
-  const ads = adsData.map((data) => {
+  const ads = adsData.map((data, i) => {
     return (
       <Advertisement
+        key={i}
         companyName={data.companyName}
         title={data.title}
         contract={data.contract}
