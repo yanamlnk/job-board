@@ -1,18 +1,17 @@
 import React from "react";
 import "../styles/Advertisement_Module.css";
 
-function Advertisement() {
-  // Fonction pour gérer le clic et tester la connexion avec le backend
+function Advertisement(props) {
   const handleLearnMoreClick = () => {
-    fetch("http://localhost:3001/api/test") // Remplace l'URL par celle de ton backend
+    fetch("http://localhost:3001/api/test")
       .then((response) => {
         if (!response.ok) {
           throw new Error("Erreur lors de la requête");
         }
-        return response.json(); // Convertir la réponse en JSON
+        return response.json();
       })
       .then((data) => {
-        console.log(data.message); // Afficher le message du backend
+        console.log(data.message);
       })
       .catch((error) => {
         console.error("Erreur lors de la connexion au backend:", error);
@@ -22,14 +21,14 @@ function Advertisement() {
   return (
     <>
       <div className={"advertisement"}>
-        <p>company</p>
+        <p>{props.companyName}</p>
         <div className={"container_title_button"}>
-          <h1>Title</h1>
+          <h1>{props.title}</h1>
           <button onClick={handleLearnMoreClick}>Learn More</button>
         </div>
         <div className={"container_contract_location"}>
-          <p>contract</p>
-          <p>location</p>
+          <p>{props.contract}</p>
+          <p>{props.location}</p>
         </div>
       </div>
     </>
