@@ -13,9 +13,10 @@ function Home() {
       .catch((error) => console.error("Erreur:", error));
   }, []);
 
-  const ads = adsData.map((data) => {
+  const ads = adsData.map((data, i) => {
     return (
       <Advertisement
+        key={i}
         companyName={data.companyName}
         title={data.title}
         contract={data.contract}
