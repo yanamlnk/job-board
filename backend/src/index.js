@@ -1,19 +1,22 @@
 const express = require("express");
 const mysql = require("mysql2");
-const cors = require("cors"); // Pour autoriser les requêtes venant du frontend
+const cors = require("cors");
 
-const app = express(); // Crée une instance d'Express
+const app = express();
+app.use(cors());
+app.use(express.json());
 
-// Middleware
-app.use(cors()); // Permet d'accepter les requêtes cross-origin (CORS)
-app.use(express.json()); // Permet de traiter les données JSON
+// Démarrer le serveur
+app.listen(3001, () => {
+  console.log(`Serveur backend démarré sur le port ${3001}`);
+});
 
 // Configurer la connexion à la base de données
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "", // Mot de passe, si applicable
-  database: "job_board", // Remplace par le nom de ta base de données
+  password: "",
+  database: "job_board",
 });
 
 // Connexion à la base de données
@@ -25,7 +28,41 @@ db.connect((err) => {
   console.log("Connecté à la base de données MySQL");
 });
 
-// Route de test pour vérifier la connexion au backend
+// Route pour gérer l'inscription des clients
+app.post("/api/clients", (req, res) => {
+  const {
+    name,
+    lastName,
+    email,
+    phoneNumber,
+    profilPicture,
+    birthDate,
+    location,
+  } = req.body;
+
+  const query = `
+    INSERT INTO clients (name, lastName, email, phoneNumber, profilPicture, birthDate, location)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(
+    query,
+    [name, lastName, email, phoneNumber, profilPicture, birthDate, location],
+    (err, result) => {
+      if (err) {
+        console.error(
+          "Erreur lors de l'insertion dans la base de données:",
+          err
+        );
+        res.status(500).json({ error: "Erreur lors de l'insertion" });
+      } else {
+        res.json({ message: "Client ajouté avec succès!", result });
+      }
+    }
+  );
+});
+
+// Récupère la liste de tous les annonces dans la base de donnée
 app.get("/api/advertisements", (req, res) => {
   const query = `
     SELECT advertisements.*, companies.name AS companyName
@@ -39,12 +76,7 @@ app.get("/api/advertisements", (req, res) => {
         .status(500)
         .json({ error: "Erreur lors de la récupération des données" });
     } else {
-      res.json(results); // Retourner les résultats sous forme de JSON
+      res.json(results);
     }
   });
-});
-
-// Démarrer le serveur
-app.listen(3001, () => {
-  console.log(`Serveur backend démarré sur le port ${3001}`);
 });
