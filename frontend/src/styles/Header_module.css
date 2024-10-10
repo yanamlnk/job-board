@@ -10,6 +10,7 @@ header {
   
   header button {
     border: none;
+    background-color: #bfbfbf;
     cursor: pointer;
   }
   
