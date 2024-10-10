@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Advertisement from "../components/advertisement";
+import Advertisement from "../components/Advertisement";
 import "../styles/Home.css";
 import Header from "../components/Header";
 
