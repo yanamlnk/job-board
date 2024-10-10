@@ -26,8 +26,22 @@ db.connect((err) => {
 });
 
 // Route de test pour vérifier la connexion au backend
-app.get("/api/test", (req, res) => {
-  res.json({ message: "Youhou" });
+app.get("/api/advertisements", (req, res) => {
+  const query = `
+    SELECT advertisements.*, companies.name AS companyName
+    FROM advertisements
+    JOIN companies ON advertisements.company = companies.id
+  `;
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la récupération des données:", err);
+      res
+        .status(500)
+        .json({ error: "Erreur lors de la récupération des données" });
+    } else {
+      res.json(results); // Retourner les résultats sous forme de JSON
+    }
+  });
 });
 
 // Démarrer le serveur
