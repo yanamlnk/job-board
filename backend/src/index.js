@@ -30,8 +30,34 @@ db.connect((err) => {
   console.log("Connecté à la base de données MySQL");
 });
 
-// Route pour gérer l'inscription des clients
-app.post("/api/clients", async (req, res) => {
+//Route pour gérer la connexion d'un client
+app.post("/api/SignIn", (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const query = "SELECT * FROM clients WHERE email = ?";
+    db.query(query, [email], async (err, results) => {
+      if (err) {
+        console.error("Erreur lors la query à la base de données:", err);
+        res.status(500).json({ error: "Erreur lors de la query" });
+      }
+      if (results.length === 0) {
+        return res.status(404).json({ error: "Utilisateur non trouvé" });
+      }
+      const user = results[0];
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        return res.status(401).json({ error: "incorrect password" });
+      }
+      res.json({ message: "Client connecté avec succès!", token: user.token });
+    });
+  } catch (error) {
+    console.error("Erreur lors de la connexion au compte:", error);
+    res.status(500).json({ error: "Erreur lors de la connexion au compte" });
+  }
+});
+
+// Route pour gérer l'inscription d'un client
+app.post("/api/SignUp", async (req, res) => {
   const {
     name,
     lastName,
@@ -69,7 +95,7 @@ app.post("/api/clients", async (req, res) => {
         hashedPassword,
         token,
       ],
-      (err, result) => {
+      (err, results) => {
         if (err) {
           console.error(
             "Erreur lors de l'insertion dans la base de données:",
@@ -93,14 +119,14 @@ app.get("/api/advertisements", (req, res) => {
     FROM advertisements
     JOIN companies ON advertisements.company = companies.id
   `;
-  db.query(query, (err, results) => {
+  db.query(query, (err, resultss) => {
     if (err) {
       console.error("Erreur lors de la récupération des données:", err);
       res
         .status(500)
         .json({ error: "Erreur lors de la récupération des données" });
     } else {
-      res.json(results);
+      res.json(resultss);
     }
   });
 });
