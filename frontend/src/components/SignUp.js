@@ -7,9 +7,10 @@ function SignUpForm() {
     lastName: "",
     email: "",
     phoneNumber: "",
-    profilPicture: "", // Tu pourrais gérer l'upload du fichier séparément
+    profilPicture: "",
     birthDate: "",
     location: "",
+    password: "",
   });
 
   const handleChange = (e) => {
@@ -32,6 +33,12 @@ function SignUpForm() {
       .then((response) => response.json())
       .then((data) => {
         console.log("Succès:", data);
+        if (data.token) {
+          localStorage.setItem("userToken", data.token);
+          console.log("Token enregistré:", data.token);
+        } else {
+          console.error("Erreur :", data.error);
+        }
       })
       .catch((error) => {
         console.error("Erreur:", error);
@@ -61,6 +68,14 @@ function SignUpForm() {
         name="email"
         placeholder="Email"
         value={formData.email}
+        onChange={handleChange}
+        required
+      />
+      <input
+        type="password"
+        name="password"
+        placeholder="Password"
+        value={formData.password}
         onChange={handleChange}
         required
       />
