@@ -1,0 +1,9 @@
+.Container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+label {
+  text-align: center;
+}
