@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import Advertisement from "../components/advertisement";
+import Advertisement from "../components/Advertisement";
 import "../styles/Home.css";
 import Header from "../components/Header";
+import Footer from "../components/Footer";
 
 function Home() {
   const [adsData, setAdsData] = useState([]);
@@ -25,11 +26,12 @@ function Home() {
     );
   });
   return (
-    <div className={"home"}>
-      <div className={"container_advertisements"}>
-        <Header />
+    <div className="home">
+      <Header />
+      <div className="container_advertisements">
         {ads}
       </div>
+      <Footer />
     </div>
   );
 }
