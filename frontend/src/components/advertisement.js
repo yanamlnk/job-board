@@ -1,19 +1,13 @@
 import React from "react";
-import "../styles/Advertisement_Module.css";
+import "../styles/Advertisement.css";
 
 function Advertisement(props) {
   return (
     <>
       <div className={"advertisement"}>
-        <p>{props.companyName}</p>
-        <div className={"container_title_button"}>
-          <h1>{props.title}</h1>
-          <button>Learn More</button>
-        </div>
-        <div className={"container_contract_location"}>
-          <p>{props.contract}</p>
-          <p>{props.location}</p>
-        </div>
+      <h2>{props.contract} {props.contract.length > 8 ? "" : "offer"}</h2><br />
+      Company in <b>{props.location}</b> called <b>{props.companyName}</b> is looking for {props.title}
+      <button>Learn More</button>
       </div>
     </>
   );

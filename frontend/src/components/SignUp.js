@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import "../styles/SignUp.css";
-import "../styles/Advertisement_Module.css";
 function SignUpForm() {
   const [formData, setFormData] = useState({
     name: "",
