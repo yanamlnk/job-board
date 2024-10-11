@@ -1,6 +1,13 @@
 .Container {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.SignForm {
+  width: 100%;
+  display: flex;
   justify-content: center;
 }
 
