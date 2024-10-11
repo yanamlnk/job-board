@@ -1,5 +1,7 @@
 const express = require("express");
 const mysql = require("mysql2");
+const bcrypt = require("bcrypt"); // Pour hacher le mot de passe
+const uid2 = require("uid2"); // Pour générer des tokens uniques
 const cors = require("cors");
 
 const app = express();
@@ -29,7 +31,7 @@ db.connect((err) => {
 });
 
 // Route pour gérer l'inscription des clients
-app.post("/api/clients", (req, res) => {
+app.post("/api/clients", async (req, res) => {
   const {
     name,
     lastName,
@@ -38,30 +40,52 @@ app.post("/api/clients", (req, res) => {
     profilPicture,
     birthDate,
     location,
+    password,
   } = req.body;
 
-  const query = `
-    INSERT INTO clients (name, lastName, email, phoneNumber, profilPicture, birthDate, location)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
-  `;
+  try {
+    // 1. Hacher le mot de passe avant de l'enregistrer dans la base de données
+    const hashedPassword = await bcrypt.hash(password, 10); // 10 est le "salt rounds" (facteur de complexité)
 
-  db.query(
-    query,
-    [name, lastName, email, phoneNumber, profilPicture, birthDate, location],
-    (err, result) => {
-      if (err) {
-        console.error(
-          "Erreur lors de l'insertion dans la base de données:",
-          err
-        );
-        res.status(500).json({ error: "Erreur lors de l'insertion" });
-      } else {
-        res.json({ message: "Client ajouté avec succès!", result });
+    // 2. Générer un token unique pour l'utilisateur
+    const token = uid2(32); // Génère un token de 32 caractères
+
+    // 3. Insérer l'utilisateur dans la base de données avec le mot de passe haché et le token
+    const query = `
+      INSERT INTO clients (name, lastName, email, phoneNumber, profilPicture, birthDate, location, password, token)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+      query,
+      [
+        name,
+        lastName,
+        email,
+        phoneNumber,
+        profilPicture,
+        birthDate,
+        location,
+        hashedPassword,
+        token,
+      ],
+      (err, result) => {
+        if (err) {
+          console.error(
+            "Erreur lors de l'insertion dans la base de données:",
+            err
+          );
+          res.status(500).json({ error: "Erreur lors de l'insertion" });
+        } else {
+          res.json({ message: "Client ajouté avec succès!", token });
+        }
       }
-    }
-  );
+    );
+  } catch (error) {
+    console.error("Erreur lors de la création du compte:", error);
+    res.status(500).json({ error: "Erreur lors de la création du compte" });
+  }
 });
-
 // Récupère la liste de tous les annonces dans la base de donnée
 app.get("/api/advertisements", (req, res) => {
   const query = `
