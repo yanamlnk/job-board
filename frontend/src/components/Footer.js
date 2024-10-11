@@ -1,9 +1,9 @@
 import React from 'react'
 
-const Footer = () => {
+function Footer () {
   return (
     <div>
-      This is Footer!
+      Jobs © 2024
     </div>
   )
 }
