@@ -70,13 +70,9 @@ app.post("/api/SignUp", async (req, res) => {
   } = req.body;
 
   try {
-    // 1. Hacher le mot de passe avant de l'enregistrer dans la base de données
-    const hashedPassword = await bcrypt.hash(password, 10); // 10 est le "salt rounds" (facteur de complexité)
-
-    // 2. Générer un token unique pour l'utilisateur
-    const token = uid2(32); // Génère un token de 32 caractères
-
-    // 3. Insérer l'utilisateur dans la base de données avec le mot de passe haché et le token
+    
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const token = uid2(32);
     const query = `
       INSERT INTO clients (name, lastName, email, phoneNumber, profilPicture, birthDate, location, password, token)
       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
