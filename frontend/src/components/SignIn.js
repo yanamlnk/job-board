@@ -17,8 +17,7 @@ function SignInForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(signInData);
-    fetch("http://localhost:3001/api/SignIn", {
+    fetch("http://localhost:3001/api/client/SignIn", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -23,6 +23,30 @@ function ClientEdit() {
 
   const handleEdit = (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("userToken");
+
+    fetch("http://localhost:3001/api/edit", {
+      methode: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(editData),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.succes) {
+          console.log("Mise à jour réussie !");
+        } else {
+          console.error(
+            "Erreur lors de la mise à jour des données :",
+            data.error
+          );
+        }
+      })
+      .catch((error) =>
+        console.error("Erreur lors de la mise à jour du profil:", error)
+      );
   };
 
   return (
@@ -91,7 +115,7 @@ function ClientEdit() {
         onChange={handleChange}
         required
       />
-      <button type="submit">Sign Up</button>
+      <button type="submit">Save Changes</button>
     </form>
   );
 }
