@@ -22,7 +22,7 @@ function SignUpForm() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    fetch("http://localhost:3001/api/SignUp", {
+    fetch("http://localhost:3001/api/client/SignUp", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
