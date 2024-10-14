@@ -8,7 +8,7 @@ function Home() {
   const [adsData, setAdsData] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/advertisements")
+    fetch("http://localhost:3001/api/advertisement/advertisements")
       .then((response) => response.json())
       .then((data) => setAdsData(data))
       .catch((error) => console.error("Erreur:", error));
@@ -28,9 +28,7 @@ function Home() {
   return (
     <div className="home">
       <Header />
-      <div className="container_advertisements">
-        {ads}
-      </div>
+      <div className="container_advertisements">{ads}</div>
       <Footer />
     </div>
   );
