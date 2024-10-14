@@ -84,31 +84,69 @@ router.post("/SignUp", async (req, res) => {
 
 // Route pour modifier les données d'un client
 
-// const authentificateToken = (req, res, next) => {
-//   const token = req.headers[Authorization]?.split(" ")[1];
-//   if (!token) {
-//     return res
-//       .status(401)
-//       .json({ error: "Accès non autorisé, erreur de token" });
-//   }
-// };
-// const query = "SELECT * FROM clients WHERE token = ?";
-// db.query(query, [token], (err, results) => {
-//   if (err || results.length === 0) {
-//     return res
-//       .status(403)
-//       .json({ error: "Client non trouvé ou token invalide" });
-//   }
-//   req.client = results[0];
-//   next();
-// });
+const authentificateToken = (req, res, next) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  if (!token) {
+    return res
+      .status(401)
+      .json({ error: "Accès non autorisé, erreur de token" });
+  }
+  const query = "SELECT * FROM clients WHERE token = ?";
+  db.query(query, [token], (err, results) => {
+    if (err || results.length === 0) {
+      return res
+        .status(403)
+        .json({ error: "Client non trouvé ou token invalide" });
+    }
+    req.client = results[0];
+    next();
+  });
+};
 
-// router.get("/api/client", authentificateToken, (req, res) => {
-//   res.json(req.client);
-// });
+router.get("/Client", authentificateToken, (req, res) => {
+  res.json(req.client);
+});
 
-// router.put("/api/edit", (req, res) => {});
+router.put("/Edit", authentificateToken, (req, res) => {
+  const { name, lastName, email, phoneNumber, location } = req.body;
 
-// Récupère la liste de tous les annonces dans la base de donnée
+  let query = "UPDATE clients SET ";
+  const updates = [];
+  const values = [];
+  if (name) {
+    updates.push("name = ?");
+    values.push(name);
+  }
+  if (lastName) {
+    updates.push("lastName = ?");
+    values.push(lastName);
+  }
+  if (email) {
+    updates.push("email = ?");
+    values.push(email);
+  }
+  if (phoneNumber) {
+    updates.push("phoneNumber = ?");
+    values.push(phoneNumber);
+  }
+  if (location) {
+    updates.push("location = ?");
+    values.push(location);
+  }
+
+  if (updates.length === 0) {
+    return res.status(400).json({ error: "Aucune modification fournie" });
+  }
+  query += updates.join(", ") + " WHERE id = ?";
+  values.push(req.client.id);
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la mise à jour:", err);
+      return res.status(500).json({ error: "Erreur lors de la mise à jour" });
+    }
+
+    res.json({ success: true, message: "Profil mis à jour avec succès" });
+  });
+});
 
 module.exports = router;
