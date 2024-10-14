@@ -1,7 +1,27 @@
 import React from "react";
 import "../styles/Advertisement.css";
+import {useState} from "react";
+import Application from "./Application";
 
 function Advertisement(props) {
+
+  const [showDescription, setShowDescription] = useState(false);
+  const [showApplication, setShowApplication] = useState(false);
+
+  const toggleShowDescription = () => {
+    setShowDescription(!showDescription);
+  }
+  
+  const toggleElements = () => {
+    setShowDescription(!showDescription);
+    setShowApplication(!showApplication)
+  }
+
+  const closeEverything = () => {
+    setShowDescription(false);
+    setShowApplication(false);
+  }
+
   return (
     <>
       <div className={"advertisement"}>
@@ -11,7 +31,10 @@ function Advertisement(props) {
         <br />
         Company in <b>{props.location}</b> called <b>{props.companyName}</b> is
         looking for {props.title}
-        <button>Learn More</button>
+        <br />
+        <div>{showDescription || showApplication? <button onClick = {closeEverything}>Close</button> : <button onClick = {toggleShowDescription}>Learn More</button>}</div>
+        {showDescription && (<><p>{props.description}</p><button onClick={toggleElements}>Apply</button></>)}
+        {showApplication && (<><Application /><button onClick={toggleElements}>Return</button></>)}
       </div>
     </>
   );

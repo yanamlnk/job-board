@@ -22,6 +22,7 @@ function Home() {
         title={data.title}
         contract={data.contract}
         location={data.location}
+        description={data.description}
       />
     );
   });
