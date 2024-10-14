@@ -8,24 +8,21 @@ const Header = () => {
   //default value is false
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  //uncomment this instead of simulation
-  // useEffect(() => {
-  //   const token = localStorage.getItem('userToken');
-  //   if (token) {
-  //     setIsLoggedIn(true);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
   const navigate = useNavigate();
 
-  //Just to simulate togling of token - UNCOMMENT IT AFTERWARDS!!!!
   const handleLogin = () => {
-    setIsLoggedIn(true); // Simulate a user logging in
-    // navigate('/login');
+    navigate('/login');
   };
 
   const handleLogout = () => {
-    //localStorage.removeItem('userToken');
-    setIsLoggedIn(false); // Simulate a user logging out
+    localStorage.removeItem('userToken');
+    setIsLoggedIn(false);
     window.location.reload();
   };
 
