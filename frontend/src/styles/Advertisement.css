@@ -1,3 +1,97 @@
 .advertisement {
-  text-align: center;
+  padding: 10px;
+  border: 2px solid transparent;
+  position: relative; 
+  font-size: 20px;
+  display: flex;
+  flex-direction: column;
+  text-align: justify;
+  height: 100%; 
 }
+
+.advertisement h2 {
+  text-align:center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.advertisement button {
+  background-color: transparent;
+  font-family: 'Noticia Text', serif;
+  border: 0px;
+  border-bottom: 1px solid transparent;
+  margin: 0 5px;
+  cursor: pointer;
+  font-size: 16px; 
+}
+
+.advertisement button:hover {
+  border-bottom: 1px solid black;
+}  
+
+/* .image-container {
+  position: absolute; 
+  top: 10px;          
+  right: 10px;        
+  z-index: 10;        
+}
+
+.image-container img {
+  width: 100px;        
+} */
+
+.description {
+  margin-top: 10px;
+  width: 100%; 
+  padding: 10px;
+  text-align: justify;
+  font-size: 20px;
+}
+
+
+/* @media (max-width: 768px) {
+  .image-container img {
+    width: 70px; 
+  }
+} */
+
+.paperBackground {
+  width: 100%;
+  height: 100%; 
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 10px 0;
+}
+
+.paperBackground:nth-child(odd) {
+  background-image: url('../resources/background1.png');
+  .title {
+    background-color: rgb(255, 255, 0);
+  }
+}
+
+.paperBackground:nth-child(even) {
+  background-image: url('../resources/background2.png');
+  .title {
+    background-color: rgb(0, 255, 30);
+  }
+}
+
+.paperBackground:nth-child(3n) {
+  .title {
+    background-color: rgb(0, 251, 255);
+  }
+}
+
+.paperBackground:nth-child(4n) {
+  .title {
+    background-color: rgb(255, 131, 236);
+  }
+}
+
+
