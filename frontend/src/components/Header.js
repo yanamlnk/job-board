@@ -3,40 +3,41 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '../resources/Icon.png'
 import '../styles/Header.css'
 
-const Header = () => {
+const Header = (props) => {
 
   //default value is false
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  //uncomment this instead of simulation
-  // useEffect(() => {
-  //   const token = localStorage.getItem('userToken');
-  //   if (token) {
-  //     setIsLoggedIn(true);
-  //   }
-  // }, []);
+  useEffect(() => {
+    const token = localStorage.getItem('userToken');
+    if (token) {
+      setIsLoggedIn(true);
+    }
+  }, []);
   const navigate = useNavigate();
 
-  //Just to simulate togling of token - UNCOMMENT IT AFTERWARDS!!!!
   const handleLogin = () => {
-    setIsLoggedIn(true); // Simulate a user logging in
-    // navigate('/login');
+    navigate('/login');
   };
 
   const handleLogout = () => {
-    //localStorage.removeItem('userToken');
-    setIsLoggedIn(false); // Simulate a user logging out
+    localStorage.removeItem('userToken');
+    setIsLoggedIn(false);
     window.location.reload();
   };
 
   return (
     <header>
-      <img src={Logo} alt='Logo'></img>
-      <nav className="navigation-buttons">
+      <div className="red-line"></div>
+      <div className="logo_container"><img src={Logo} alt='Logo'></img></div>
+      <nav className={`navigation-buttons ${isLoggedIn ? "logged-in" : "logged-out"}`}>
       {isLoggedIn ? (
           <>
-            <button>My Cabinet</button>
-            <button onClick={handleLogout}>Log Out</button>
+            <span>Hello, {props.name}!</span>
+            <div>
+              <button>My Cabinet</button>
+              <button onClick={handleLogout}>Log Out</button>
+            </div>
           </>
         ) : (
           <>
