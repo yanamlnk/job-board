@@ -34,7 +34,7 @@ function Advertisement(props) {
         <br />
         <div>{showDescription || showApplication? <button onClick = {closeEverything}>Close</button> : <button onClick = {toggleShowDescription}>Learn More</button>}</div>
         {showDescription && (<><p>{props.description}</p><button onClick={toggleElements}>Apply</button></>)}
-        {showApplication && (<><Application /><button onClick={toggleElements}>Return</button></>)}
+        {showApplication && (<><Application userData = {props.userData}/><button onClick={toggleElements}>Return</button></>)}
       </div>
     </>
   );

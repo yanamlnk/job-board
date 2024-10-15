@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Logo from '../resources/Icon.png'
 import '../styles/Header.css'
 
-const Header = () => {
+const Header = (props) => {
 
   //default value is false
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -32,6 +32,7 @@ const Header = () => {
       <nav className="navigation-buttons">
       {isLoggedIn ? (
           <>
+            Hello, {props.name}
             <button>My Cabinet</button>
             <button onClick={handleLogout}>Log Out</button>
           </>
