@@ -1,10 +1,11 @@
 import React from 'react'
+import "../styles/Footer.css";
 
 function Footer () {
   return (
-    <div>
+    <footer>
       Jobs © 2024
-    </div>
+    </footer>
   )
 }
 

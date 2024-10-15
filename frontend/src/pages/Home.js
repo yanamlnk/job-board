@@ -32,6 +32,7 @@ function Home() {
     return (
       <Advertisement
         key={i}
+        adID={data.id}
         companyName={data.companyName}
         title={data.title}
         contract={data.contract}

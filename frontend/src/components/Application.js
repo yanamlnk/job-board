@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
+import "../styles/Application.css";
 
-function Application({ userData }) {
+function Application({ userData, adID }) {
   const [formData, setFormData] = useState({
     name: "",
     lastName: "",
@@ -9,6 +10,9 @@ function Application({ userData }) {
     location: "",
     motivation: ""
   });
+
+  const [submitted, setSubmitted] = useState(false);
+  const [alreadyApplied, setAlreadyApplied] = useState(false);
 
   useEffect(() => {
     if (userData) {
@@ -21,7 +25,29 @@ function Application({ userData }) {
         motivation: ""
       });
     }
-  }, [userData]); 
+
+    if (userData.id && adID) {
+        fetch("http://localhost:3001/api/application/check-application", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                userId: userData.id,
+                advertisementId: adID,
+            }),
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            if (data.alreadyApplied) {
+                setAlreadyApplied(true);
+            }
+        })
+        .catch((error) => {
+            console.error("Error checking application:", error);
+        });
+    }
+  }, [userData, adID]); 
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -33,13 +59,43 @@ function Application({ userData }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    // Here you can make an API call to submit the form data
+  
+    if (!formData.motivation || !userData.id) {
+      console.error("User data or motivation is missing.");
+      return;
+    }
+  
+    const applicationData = {
+      userId: userData.id,    
+      advertisementId: adID,  
+      motivation: formData.motivation
+    };
+  
+    fetch("http://localhost:3001/api/application/apply", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(applicationData)
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.message) {
+            setSubmitted(true);
+        }
+      })
+      .catch((error) => {
+        console.error("Error submitting application:", error);
+      });
   };
+  
+  if (submitted) {
+    return <h3>Thank you for your application!</h3>;
+  }
 
   return (
     <div>
-      <h3>Application Form</h3>
+      {alreadyApplied && <p>You have already applied for this offer.</p>}
       <form onSubmit={handleSubmit}>
         <div>
           <label htmlFor="name">Name:</label>

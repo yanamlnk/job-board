@@ -28,13 +28,16 @@ const Header = (props) => {
 
   return (
     <header>
-      <img src={Logo} alt='Logo'></img>
-      <nav className="navigation-buttons">
+      <div className="red-line"></div>
+      <div className="logo_container"><img src={Logo} alt='Logo'></img></div>
+      <nav className={`navigation-buttons ${isLoggedIn ? "logged-in" : "logged-out"}`}>
       {isLoggedIn ? (
           <>
-            Hello, {props.name}
-            <button>My Cabinet</button>
-            <button onClick={handleLogout}>Log Out</button>
+            <span>Hello, {props.name}!</span>
+            <div>
+              <button>My Cabinet</button>
+              <button onClick={handleLogout}>Log Out</button>
+            </div>
           </>
         ) : (
           <>
