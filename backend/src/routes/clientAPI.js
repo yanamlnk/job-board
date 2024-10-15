@@ -37,7 +37,6 @@ router.post("/SignUp", async (req, res) => {
     lastName,
     email,
     phoneNumber,
-    profilPicture,
     birthDate,
     location,
     password,
@@ -63,8 +62,8 @@ router.post("/SignUp", async (req, res) => {
       const hashedPassword = await bcrypt.hash(password, 10);
       const token = uid2(32);
       const query = `
-          INSERT INTO clients (name, lastName, email, phoneNumber, profilPicture, birthDate, location, password, token)
-          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+          INSERT INTO clients (name, lastName, email, phoneNumber, birthDate, location, password, token)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         `;
 
       db.query(
@@ -74,7 +73,6 @@ router.post("/SignUp", async (req, res) => {
           lastName,
           email,
           phoneNumber,
-          profilPicture,
           birthDate,
           location,
           hashedPassword,
@@ -100,7 +98,91 @@ router.post("/SignUp", async (req, res) => {
   }
 });
 
-// Route pour modifier les données d'un client
+// Route pour récupérer tous les clients
+router.get("/", (req, res) => {
+  db.query("SELECT * FROM clients", (err, results) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la récupération des clients" });
+    }
+    res.json(results);
+  });
+});
+
+// Route pour qu'un admin puisse modifier un client
+
+router.put("/:id", (req, res) => {
+  const { id } = req.params;
+  const {
+    name,
+    lastName,
+    email,
+    phoneNumber,
+    birthDate,
+    location,
+  } = req.body;
+
+  let query = "UPDATE clients SET ";
+  const updates = [];
+  const values = [];
+
+  if (name) {
+    updates.push("name = ?");
+    values.push(name);
+  }
+  if (lastName) {
+    updates.push("lastName = ?");
+    values.push(lastName);
+  }
+  if (email) {
+    updates.push("email = ?");
+    values.push(email);
+  }
+  if (phoneNumber) {
+    updates.push("phoneNumber = ?");
+    values.push(phoneNumber);
+  }
+  if (birthDate) {
+    updates.push("birthDate = ?");
+    values.push(birthDate);
+  }
+  if (location) {
+    updates.push("location = ?");
+    values.push(location);
+  }
+
+  if (updates.length === 0) {
+    return res.status(400).json({ error: "Aucune modification fournie" });
+  }
+
+  query += updates.join(", ") + " WHERE id = ?";
+  values.push(id);
+
+  db.query(query, values, (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la mise à jour:", err);
+      return res.status(500).json({ error: "Erreur lors de la mise à jour" });
+    }
+
+    res.json({ success: true, message: "Client mis à jour avec succès" });
+  });
+});
+
+// Route pour supprimer un client par ID
+router.delete("/:id", (req, res) => {
+  const { id } = req.params;
+  db.query("DELETE FROM clients WHERE id = ?", [id], (err, result) => {
+    if (err) {
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la suppression du client" });
+    }
+    res.json({ message: "Client supprimé avec succès!" });
+  });
+});
+
+// Route pour qu'un client puisse modifier ses propres données
 
 const authentificateToken = (req, res, next) => {
   const token = req.headers["authorization"]?.split(" ")[1];
