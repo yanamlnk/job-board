@@ -44,38 +44,56 @@ router.post("/SignUp", async (req, res) => {
   } = req.body;
 
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const token = uid2(32);
-    const query = `
-        INSERT INTO clients (name, lastName, email, phoneNumber, profilPicture, birthDate, location, password, token)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `;
+    // Vérifier si l'email existe déjà dans la base de données
+    const emailQuery = "SELECT * FROM clients WHERE email = ?";
+    db.query(emailQuery, [email], async (err, results) => {
+      if (err) {
+        console.error("Erreur lors de la vérification de l'email:", err);
+        return res
+          .status(500)
+          .json({ error: "Erreur lors de la vérification de l'email" });
+      }
 
-    db.query(
-      query,
-      [
-        name,
-        lastName,
-        email,
-        phoneNumber,
-        profilPicture,
-        birthDate,
-        location,
-        hashedPassword,
-        token,
-      ],
-      (err, results) => {
-        if (err) {
-          console.error(
-            "Erreur lors de l'insertion dans la base de données:",
-            err
-          );
-          res.status(500).json({ error: "Erreur lors de l'insertion" });
-        } else {
+      // Si l'email existe déjà
+      if (results.length > 0) {
+        return res.status(400).json({ error: "Cet email est déjà utilisé." });
+      }
+
+      // Si l'email n'existe pas, procéder à l'inscription
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const token = uid2(32);
+      const query = `
+          INSERT INTO clients (name, lastName, email, phoneNumber, profilPicture, birthDate, location, password, token)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+
+      db.query(
+        query,
+        [
+          name,
+          lastName,
+          email,
+          phoneNumber,
+          profilPicture,
+          birthDate,
+          location,
+          hashedPassword,
+          token,
+        ],
+        (err, results) => {
+          if (err) {
+            console.error(
+              "Erreur lors de l'insertion dans la base de données:",
+              err
+            );
+            return res
+              .status(500)
+              .json({ error: "Erreur lors de l'insertion" });
+          }
           res.json({ message: "Client ajouté avec succès!", token });
         }
-      }
-    );
+      );
+    });
   } catch (error) {
     console.error("Erreur lors de la création du compte:", error);
     res.status(500).json({ error: "Erreur lors de la création du compte" });
