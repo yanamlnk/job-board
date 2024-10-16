@@ -172,6 +172,7 @@ router.delete("/:id", (req, res) => {
 
 const authentificateToken = (req, res, next) => {
   const token = req.headers["authorization"]?.split(" ")[1];
+  // console.log("voici le token : ", token);
   if (!token) {
     return res
       .status(401)
@@ -185,6 +186,7 @@ const authentificateToken = (req, res, next) => {
         .json({ error: "Client non trouvé ou token invalide" });
     }
     req.client = results[0];
+    // console.log(req.client);
     next();
   });
 };
@@ -193,12 +195,13 @@ router.get("/Client", authentificateToken, (req, res) => {
   res.json(req.client);
 });
 
-router.put("/Edit", authentificateToken, (req, res) => {
-  const { name, lastName, email, phoneNumber, birthDate, location } = req.body;
+router.put("/Update/Update", authentificateToken, (req, res) => {
+  const { name, lastName, email, phoneNumber, location } = req.body;
 
   let query = "UPDATE clients SET ";
   const updates = [];
   const values = [];
+
   if (name) {
     updates.push("name = ?");
     values.push(name);
@@ -215,10 +218,6 @@ router.put("/Edit", authentificateToken, (req, res) => {
     updates.push("phoneNumber = ?");
     values.push(phoneNumber);
   }
-  if (birthDate) {
-    updates.push("birtDate = ?");
-    values.push(birthDate);
-  }
   if (location) {
     updates.push("location = ?");
     values.push(location);
@@ -227,16 +226,62 @@ router.put("/Edit", authentificateToken, (req, res) => {
   if (updates.length === 0) {
     return res.status(400).json({ error: "Aucune modification fournie" });
   }
+
   query += updates.join(", ") + " WHERE id = ?";
   values.push(req.client.id);
-  db.query(query, values, (err, result) => {
+  db.query(query, values, (err, results) => {
     if (err) {
       console.error("Erreur lors de la mise à jour:", err);
       return res.status(500).json({ error: "Erreur lors de la mise à jour" });
     }
-
+    console.log("Je suis le dernier résultat : ", results);
     res.json({ success: true, message: "Profil mis à jour avec succès" });
   });
 });
 
+// Route pour changer le mot de passe
+router.put("/changePassword/changePassword", (req, res) => {
+  const token = req.headers["authorization"]?.split(" ")[1];
+  const { currentPassword, newPassword } = req.body;
+
+  if (!token) {
+    return res.status(401).json({ error: "Accès non autorisé" });
+  }
+
+  // Récupérer l'utilisateur via son token
+  const query = "SELECT * FROM clients WHERE token = ?";
+  db.query(query, [token], (err, results) => {
+    if (err || results.length === 0) {
+      return res
+        .status(403)
+        .json({ error: "Utilisateur non trouvé ou token invalide" });
+    }
+
+    const user = results[0];
+
+    // Vérifier que le mot de passe actuel est correct
+    bcrypt.compare(currentPassword, user.password, (err, match) => {
+      if (!match) {
+        return res.status(401).json({ error: "Mot de passe actuel incorrect" });
+      }
+
+      // Si les mots de passe correspondent, on peut mettre à jour avec le nouveau mot de passe
+      const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
+      const updateQuery = "UPDATE clients SET password = ? WHERE id = ?";
+
+      db.query(updateQuery, [hashedNewPassword, user.id], (err, result) => {
+        if (err) {
+          return res
+            .status(500)
+            .json({ error: "Erreur lors de la mise à jour du mot de passe" });
+        }
+
+        res.json({
+          success: true,
+          message: "Mot de passe mis à jour avec succès",
+        });
+      });
+    });
+  });
+});
 module.exports = router;
