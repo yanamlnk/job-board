@@ -1,18 +1,18 @@
 .container_advertisements {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 20px;
+  gap: 30px;
   margin: 20px;
 }
 
 @media (max-width: 1200px) {
   .container_advertisements {
-    grid-template-columns: repeat(3, 1fr); /* 3 columns for medium screens */
+    grid-template-columns: repeat(3, 1fr);
   }
 }
 
 @media (max-width: 768px) {
   .container_advertisements {
-    grid-template-columns: 1fr; /* 1 column for mobile */
+    grid-template-columns: 1fr;
   }
 }

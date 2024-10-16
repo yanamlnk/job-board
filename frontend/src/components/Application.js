@@ -94,11 +94,11 @@ function Application({ userData, adID }) {
   }
 
   return (
-    <div>
-      {alreadyApplied && <p>You have already applied for this offer.</p>}
+    <div className = "application">
+      <h2>Application</h2>
+      {alreadyApplied && <p style={{"color":"rgb(208, 8, 8)", "fontSize":"12px", "textAlign": "center"}}><i>You have already applied for this offer.</i></p>}
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="name">Name:</label>
           <input
             type="text"
             id="name"
@@ -107,9 +107,9 @@ function Application({ userData, adID }) {
             onChange={handleChange}
             required
           />
+          <label htmlFor="name">(Name)</label>
         </div>
         <div>
-          <label htmlFor="lastName">Last Name:</label>
           <input
             type="text"
             id="lastName"
@@ -118,9 +118,10 @@ function Application({ userData, adID }) {
             onChange={handleChange}
             required
           />
+          <label htmlFor="lastName">(Surname)</label>
         </div>
+
         <div>
-          <label htmlFor="email">Email:</label>
           <input
             type="email"
             id="email"
@@ -129,9 +130,9 @@ function Application({ userData, adID }) {
             onChange={handleChange}
             required
           />
+          <label htmlFor="email">(Email)</label>
         </div>
         <div>
-          <label htmlFor="phoneNumber">Phone Number:</label>
           <input
             type="text"
             id="phoneNumber"
@@ -140,9 +141,9 @@ function Application({ userData, adID }) {
             onChange={handleChange}
             required
           />
+          <label htmlFor="phoneNumber">(Phone)</label>
         </div>
         <div>
-          <label htmlFor="location">Location:</label>
           <input
             type="text"
             id="location"
@@ -151,9 +152,10 @@ function Application({ userData, adID }) {
             onChange={handleChange}
             required
           />
+          <label htmlFor="location">(City)</label>
         </div>
         <div>
-          <label htmlFor="motivation">Motivation:</label>
+          <label htmlFor="motivation">Please describe your motivation, tell us about your skills and background:</label>
           <textarea
             id="motivation"
             name="motivation"
@@ -163,8 +165,8 @@ function Application({ userData, adID }) {
             required
           />
         </div>
-        <div>
-          <button type="submit">Submit Application</button>
+        <div className = "submit-container">
+          <button type="submit">Send</button>
         </div>
       </form>
     </div>
