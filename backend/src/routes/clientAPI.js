@@ -32,15 +32,8 @@ router.post("/SignIn", (req, res) => {
 
 // Route pour gérer l'inscription d'un client
 router.post("/SignUp", async (req, res) => {
-  const {
-    name,
-    lastName,
-    email,
-    phoneNumber,
-    birthDate,
-    location,
-    password,
-  } = req.body;
+  const { name, lastName, email, phoneNumber, birthDate, location, password } =
+    req.body;
 
   try {
     // Vérifier si l'email existe déjà dans la base de données
@@ -114,14 +107,7 @@ router.get("/", (req, res) => {
 
 router.put("/:id", (req, res) => {
   const { id } = req.params;
-  const {
-    name,
-    lastName,
-    email,
-    phoneNumber,
-    birthDate,
-    location,
-  } = req.body;
+  const { name, lastName, email, phoneNumber, birthDate, location } = req.body;
 
   let query = "UPDATE clients SET ";
   const updates = [];
@@ -208,7 +194,7 @@ router.get("/Client", authentificateToken, (req, res) => {
 });
 
 router.put("/Edit", authentificateToken, (req, res) => {
-  const { name, lastName, email, phoneNumber, location } = req.body;
+  const { name, lastName, email, phoneNumber, birthDate, location } = req.body;
 
   let query = "UPDATE clients SET ";
   const updates = [];
@@ -228,6 +214,10 @@ router.put("/Edit", authentificateToken, (req, res) => {
   if (phoneNumber) {
     updates.push("phoneNumber = ?");
     values.push(phoneNumber);
+  }
+  if (birthDate) {
+    updates.push("birtDate = ?");
+    values.push(birthDate);
   }
   if (location) {
     updates.push("location = ?");
