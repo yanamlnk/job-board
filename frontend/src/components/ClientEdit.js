@@ -7,8 +7,12 @@ function ClientEdit() {
     lastName: "",
     email: "",
     phoneNumber: "",
+    birthDate: "",
     location: "",
   });
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("userToken"); // Suppose qu'on récupère le token stocké
@@ -22,9 +26,9 @@ function ClientEdit() {
       })
         .then((response) => response.json())
         .then((data) => {
-          data.password = "";
-          data.birthDate = "";
-          setEditData(data); // Charger les données actuelles dans le formulaire
+          data.birthDate = data.birthDate ? data.birthDate.split("T")[0] : "";
+          console.log(data);
+          setEditData(data);
         })
         .catch((error) =>
           console.error(
@@ -43,6 +47,8 @@ function ClientEdit() {
     });
   };
 
+  const handleChangePassword = (e) => {};
+
   const handleEdit = (e) => {
     e.preventDefault();
     const token = localStorage.getItem("userToken");
@@ -57,7 +63,6 @@ function ClientEdit() {
     })
       .then((response) => response.json())
       .then((data) => {
-        // console.log(data);
         if (data.success) {
           console.log("Mise à jour réussie !");
         } else {
@@ -73,46 +78,79 @@ function ClientEdit() {
   };
 
   return (
-    <form className={"EditForm"} onSubmit={handleEdit}>
-      <label>Edit</label>
-      <input
-        type="text"
-        name="name"
-        placeholder="First Name"
-        value={editData.name}
+    <div className={"Container"}>
+      <form className={"EditForm"} onSubmit={handleEdit}>
+        <label>Personal data</label>
+        <input
+          type="text"
+          name="name"
+          placeholder="First Name"
+          value={editData.name}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="lastName"
+          placeholder="Last Name"
+          value={editData.lastName}
+          onChange={handleChange}
+        />
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={editData.email}
+          onChange={handleChange}
+        />
+        <input
+          type="tel"
+          name="phoneNumber"
+          placeholder="Phone Number"
+          value={editData.phoneNumber}
+          onChange={handleChange}
+        />
+        {/* <input
+        name="birthDate"
+        type="date"
+        value={editData.birthDate}
         onChange={handleChange}
-      />
-      <input
-        type="text"
-        name="lastName"
-        placeholder="Last Name"
-        value={editData.lastName}
-        onChange={handleChange}
-      />
-      <input
-        type="email"
-        name="email"
-        placeholder="Email"
-        value={editData.email}
-        onChange={handleChange}
-      />
-      <input
-        type="tel"
-        name="phoneNumber"
-        placeholder="Phone Number"
-        value={editData.phoneNumber}
-        onChange={handleChange}
-      />
+      /> */}
+        <input
+          type="text"
+          name="location"
+          placeholder="Location"
+          value={editData.location}
+          onChange={handleChange}
+        />
+        <button type="submit">Save Changes</button>
+      </form>
 
-      <input
-        type="text"
-        name="location"
-        placeholder="Location"
-        value={editData.location}
-        onChange={handleChange}
-      />
-      <button type="submit">Save Changes</button>
-    </form>
+      <form className={"ChangePassword"} onSubmit={handleChangePassword}>
+        <label>Change Password</label>
+        <input
+          type="password"
+          name="password"
+          placeholder="Current Password"
+          value={currentPassword}
+          onChange={setCurrentPassword}
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="New Password"
+          value={newPassword}
+          onChange={setNewPassword}
+        />{" "}
+        <input
+          type="password"
+          name="password"
+          placeholder="Confirm Password"
+          value={confirmPassword}
+          onChange={setConfirmPassword}
+        />
+        <button type="submit">Change Password</button>
+      </form>
+    </div>
   );
 }
 

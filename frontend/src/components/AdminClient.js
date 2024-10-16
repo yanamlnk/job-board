@@ -85,7 +85,7 @@ function AdminClient() {
       : "";
 
     setEditFormData({
-      id: client.id, // Mettre à jour l'ID pour les mises à jour
+      id: client.id,
       name: client.name,
       lastName: client.lastName,
       email: client.email,

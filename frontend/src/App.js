@@ -2,7 +2,7 @@ import "./App.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Admin from "./pages/Admin";
-import User from "./pages/User";
+import Client from "./pages/Client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 function App() {
@@ -20,8 +20,8 @@ function App() {
       element: <Admin />,
     },
     {
-      path: "/user/:id",
-      element: <User />,
+      path: "/client",
+      element: <Client />,
     },
   ]);
   return (

@@ -1,6 +1,13 @@
-.EditForm {
+.Container {
+  display: flex;
+  flex-direction: row;
+
+  justify-content: space-around;
+}
+
+form {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 10px;
   width: 20%;
 }

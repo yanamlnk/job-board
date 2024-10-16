@@ -73,6 +73,7 @@ function SignInForm() {
         if (data.token) {
           localStorage.setItem("userToken", data.token);
           console.log("Client connecté avec succès:", data);
+          navigate("/");
 
           // Si tu veux faire quelque chose après la connexion client, ajoute ici
         }
