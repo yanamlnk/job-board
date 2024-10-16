@@ -2,7 +2,7 @@
     margin-bottom: 20px;
 }
 
-form {
+.application form {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -10,16 +10,16 @@ form {
   flex-grow: auto;
 }
 
-label {
-  font-size: 10px;
+.application label {
+  font-size: 12px;
   text-align: center;
   margin-bottom: 5px;
   display: block; 
 }
 
-input[type="text"],
-input[type="email"],
-textarea {
+.application input[type="text"],
+.application input[type="email"],
+.application textarea {
   width: 100%;
   padding: 10px;
   border: none;
@@ -27,15 +27,16 @@ textarea {
   background-color: transparent;
   font-size: 16px;
   outline: none;
+  text-align: center;
 }
 
-textarea {
+.application textarea {
   border: 1px solid #000000;
   padding: 10px;
   margin-bottom: -20px;
 }
 
-button[type="submit"] {
+.application button[type="submit"] {
   padding: -10px;
   font-size: 16px;
   cursor: pointer;
@@ -43,7 +44,7 @@ button[type="submit"] {
   font-weight: bold;
 }
 
-button[type="submit"]:hover {
+.application button[type="submit"]:hover {
   border-bottom: 1px solid black;
 }
 

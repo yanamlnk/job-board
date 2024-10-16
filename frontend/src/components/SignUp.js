@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../styles/SignUp.css";
-function SignUpForm() {
+import { useNavigate } from "react-router-dom";
+
+function SignUpForm({handleLogInActive}) {
   const [signUpData, setSignUpData] = useState({
     name: "",
     lastName: "",
@@ -12,6 +14,10 @@ function SignUpForm() {
     password: "",
   });
 
+  const [error, setError] = useState("");
+
+  const navigate = useNavigate();
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSignUpData({
@@ -19,6 +25,10 @@ function SignUpForm() {
       [name]: value,
     });
   };
+
+  const handleSuccess = () => {
+    navigate("/");
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -31,18 +41,30 @@ function SignUpForm() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Succès inscription:", data);
         if (data.token) {
           localStorage.setItem("userToken", data.token);
-          console.log("Token enregistré:", data.token);
+          handleSuccess();
         } else {
           console.error("Erreur :", data.error);
+          if (data.error === "Cet email est déjà utilisé.") {
+            setError("Email is already used.");
+          } else {
+            setError("Something went wrong. Please try again later.");
+          }
         }
       })
       .catch((error) => {
         console.error("Erreur:", error);
       });
   };
+
+  const errorMessage = (message) => {
+    if (message === "Email is already used.") {
+      return <p>{message} Please <a href="#" onClick={() => handleLogInActive(true)}>log in.</a></p>
+    } else {
+      return <p>{message}</p>
+    }
+  }
 
   return (
     <>
@@ -113,6 +135,7 @@ function SignUpForm() {
         />
         <button type="submit">Sign Up</button>
       </form>
+      {error && errorMessage(error)}
     </>
   );
 }

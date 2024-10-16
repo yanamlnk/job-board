@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Importer useNavigate pour la redirection
 import "../styles/SignIn.css";
 
-function SignInForm() {
+function SignInForm({handleLogInActive}) {
   const [signInData, setSignInData] = useState({
     email: "",
     password: "",
