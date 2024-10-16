@@ -1,11 +1,11 @@
 .Container {
   display: flex;
   flex-direction: row;
-
   justify-content: space-around;
 }
 
-form {
+.EditForm,
+.ChangePassword {
   display: flex;
   flex-direction: column;
   gap: 10px;
