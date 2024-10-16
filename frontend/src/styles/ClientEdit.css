@@ -4,10 +4,3 @@
 
   justify-content: space-around;
 }
-
-form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 20%;
-}
