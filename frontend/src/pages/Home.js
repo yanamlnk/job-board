@@ -38,6 +38,8 @@ function Home() {
         contract={data.contract}
         location={data.location}
         description={data.description}
+        salary={data.salary}
+        date={data.postDate}
         userData={userData}
       />
     );
