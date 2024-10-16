@@ -20,7 +20,11 @@ const Header = (props) => {
   };
 
   const handleLogin = () => {
-    navigate("/login");
+    navigate("/login", { state: { mode: 'login' } });
+  };
+
+  const handleSignUp = () => {
+    navigate("/login", { state: { mode: 'signup' } });
   };
 
   const handleMyCabinet = () => {
@@ -55,6 +59,7 @@ const Header = (props) => {
         ) : (
           <>
             <button onClick={handleLogin}>Log In</button>
+            <button onClick={handleSignUp}>Sign Up</button>
           </>
         )}
       </nav>
