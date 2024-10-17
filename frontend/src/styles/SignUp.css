@@ -1,5 +1,73 @@
-.signUpForm {
+.signup-form {
+  margin: 20px;
+}
+
+.signup-form form {
+display: flex;
+flex-direction: column;
+width: 100%;
+max-width: 600px;
+flex-grow: auto;
+}
+
+.signup-form label {
+font-size: 12px;
+text-align: center;
+margin-bottom: 5px;
+display: block; 
+}
+
+.signup-form input[type="date"],
+.signup-form input[type="tel"],
+.signup-form input[type="text"],
+.signup-form input[type="password"],
+.signup-form input[type="email"] {
+width: 100%;
+padding: 10px;
+border: none;
+border-bottom: 1px solid #000000;
+background-color: transparent;
+font-size: 16px;
+outline: none;
+text-align: center;
+font: 14px 'Noticia Text', serif;
+}
+
+.signup-form input:-webkit-autofill,
+.signup-form textarea:-webkit-autofill {
+background-color: transparent !important;
+-webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+box-shadow: 0 0 0 1000px transparent inset !important;
+-webkit-text-fill-color: #000 !important; /* Change text color if needed */
+}
+
+.signup-form button[type="submit"] {
+background-color: transparent;
+font-family: 'Noticia Text', serif;
+border: 0px;
+border-bottom: 1px solid transparent;
+margin: 0 5px;
+cursor: pointer;
+font-size: 16px; 
+color: black;
+font-weight: bold;
+margin-top: 20px;
+}
+
+.signup-form button[type="submit"]:hover {
+border-bottom: 1px solid black;
+}
+
+.signup-submit-container {
   display: flex;
-  flex-direction: column;
-  width: 20%;
+  justify-content: center;
+  align-items: center;
+}
+
+.signup-form h2 {
+text-align: center;;
+}
+
+.signup-form input[type=date]::-webkit-datetime-edit {
+  display: none;
 }
