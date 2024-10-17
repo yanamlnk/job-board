@@ -10,6 +10,8 @@ function SignInForm({handleLogInActive}) {
 
   const navigate = useNavigate(); // Initialiser useNavigate pour la redirection
 
+  const [error, setError] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setSignInData({
@@ -17,6 +19,14 @@ function SignInForm({handleLogInActive}) {
       [name]: value,
     });
   };
+
+  const errorMessage = (message) => {
+    if (message === "User not found.") {
+      return <p>{message} Please <a href="#" onClick={() => handleLogInActive(false)}>sign up.</a></p>
+    } else {
+      return <p>{message}</p>
+    }
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -64,18 +74,22 @@ function SignInForm({handleLogInActive}) {
       body: JSON.stringify(signInData),
     })
       .then((response) => {
-        if (!response.ok) {
-          throw new Error("Erreur lors de la connexion client");
-        }
+        // if (!response.ok) {
+        //   throw new Error("Erreur lors de la connexion client");
+        // }
         return response.json();
       })
       .then((data) => {
         if (data.token) {
           localStorage.setItem("userToken", data.token);
-          console.log("Client connecté avec succès:", data);
           navigate("/");
-
-          // Si tu veux faire quelque chose après la connexion client, ajoute ici
+        } else {
+          console.error("Erreur :", data.error);
+          if (data.error === "Utilisateur non trouvé") {
+            setError("User not found.");
+          } else {
+            setError("Something went wrong. Please try again later.");
+          }
         }
       })
       .catch((error) => {
@@ -84,28 +98,29 @@ function SignInForm({handleLogInActive}) {
   };
 
   return (
-    <>
+    <div className = "signin-form">
       <form className={"loginForm"} onSubmit={handleSubmit}>
-        <label>Sign In</label>
+        <h2>Log In</h2>
         <input
           type="email"
           name="email"
-          placeholder="Email"
           value={signInData.email}
           onChange={handleChange}
           required
         />
+        <label htmlFor="email">(Email)</label>
         <input
           type="password"
           name="password"
-          placeholder="Password"
           value={signInData.password}
           onChange={handleChange}
           required
         />
-        <button type="submit">Sign In</button>
+        <label htmlFor="password">(Password)</label>
+        <div className = "login-submit-container"><button type="submit">Log In</button></div>
+        {error && errorMessage(error)}
       </form>
-    </>
+    </div>
   );
 }
 
