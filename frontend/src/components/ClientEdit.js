@@ -7,7 +7,6 @@ function ClientEdit() {
     lastName: "",
     email: "",
     phoneNumber: "",
-    birthDate: "",
     location: "",
   });
   const [currentPassword, setCurrentPassword] = useState("");
@@ -26,8 +25,6 @@ function ClientEdit() {
       })
         .then((response) => response.json())
         .then((data) => {
-          data.birthDate = data.birthDate ? data.birthDate.split("T")[0] : "";
-          console.log(data);
           setEditData(data);
         })
         .catch((error) =>
@@ -47,13 +44,40 @@ function ClientEdit() {
     });
   };
 
-  const handleChangePassword = (e) => {};
+  const handleChangePassword = (e) => {
+    e.preventDefault();
+    if (newPassword !== confirmPassword) {
+      alert("Les nouveaux mots de passe ne correspondent pas");
+      return;
+    }
+    const token = localStorage.getItem("userToken");
+
+    // Appel à l'API pour changer le mot de passe
+    fetch("http://localhost:3001/api/client/changePassword/changePassword", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ currentPassword, newPassword }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          alert("Mot de passe changé avec succès");
+        } else {
+          alert(`Erreur : ${data.error}`);
+        }
+      })
+      .catch((error) =>
+        console.error("Erreur lors du changement de mot de passe :", error)
+      );
+  };
 
   const handleEdit = (e) => {
     e.preventDefault();
     const token = localStorage.getItem("userToken");
-    // console.log(editData);
-    fetch("http://localhost:3001/api/client/Edit", {
+    fetch("http://localhost:3001/api/client/Update/Update", {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -109,12 +133,6 @@ function ClientEdit() {
           value={editData.phoneNumber}
           onChange={handleChange}
         />
-        {/* <input
-        name="birthDate"
-        type="date"
-        value={editData.birthDate}
-        onChange={handleChange}
-      /> */}
         <input
           type="text"
           name="location"
@@ -132,21 +150,21 @@ function ClientEdit() {
           name="password"
           placeholder="Current Password"
           value={currentPassword}
-          onChange={setCurrentPassword}
+          onChange={(e) => setCurrentPassword(e.target.value)}
         />
         <input
           type="password"
           name="password"
           placeholder="New Password"
           value={newPassword}
-          onChange={setNewPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
         />{" "}
         <input
           type="password"
           name="password"
           placeholder="Confirm Password"
           value={confirmPassword}
-          onChange={setConfirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <button type="submit">Change Password</button>
       </form>

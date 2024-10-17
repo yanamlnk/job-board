@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-//import AdminClient from "../components/AdminClient";
+import AdminClient from "../components/AdminClient";
 import AdminCompany from "../components/AdminCompany";
-// import AdminAdvertisement from "../components/AdminAdvertisement";
+import AdminAdvertisement from "../components/AdminAdvertisement";
 
 function Admin() {
   const navigate = useNavigate();
@@ -39,8 +39,8 @@ function Admin() {
     <div>
       <h1>Bienvenue sur la page Admin</h1>
       <AdminCompany />
-      {/* <AdminAdvertisement /> */}
-      {/* <AdminClient /> */}
+      <AdminAdvertisement />
+      <AdminClient />
     </div>
   );
 }
