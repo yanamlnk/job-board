@@ -8,6 +8,7 @@
     "cors": "^2.8.5",
     "express": "^4.21.0",
     "mysql2": "^3.11.3",
+    "nodemailer": "^6.9.15",
     "uid2": "^1.0.0"
   },
   "devDependencies": {

@@ -8,7 +8,7 @@ function Application({ userData, adID }) {
     email: "",
     phoneNumber: "",
     location: "",
-    motivation: ""
+    motivation: "",
   });
 
   const [submitted, setSubmitted] = useState(false);
@@ -22,81 +22,119 @@ function Application({ userData, adID }) {
         email: userData.email || "",
         phoneNumber: userData.phoneNumber || "",
         location: userData.location || "",
-        motivation: ""
+        motivation: "",
       });
     }
 
     if (userData.id && adID) {
-        fetch("http://localhost:3001/api/application/check-application", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                userId: userData.id,
-                advertisementId: adID,
-            }),
-        })
+      fetch("http://localhost:3001/api/application/check-application", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: userData.id,
+          advertisementId: adID,
+        }),
+      })
         .then((response) => response.json())
         .then((data) => {
-            if (data.alreadyApplied) {
-                setAlreadyApplied(true);
-            }
+          if (data.alreadyApplied) {
+            setAlreadyApplied(true);
+          }
         })
         .catch((error) => {
-            console.error("Error checking application:", error);
+          console.error("Error checking application:", error);
         });
     }
-  }, [userData, adID]); 
+  }, [userData, adID]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value
+      [name]: value,
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+    if (!localStorage.getItem("userToken")) {
+      userData.id = -1;
+    }
+
     if (!formData.motivation || !userData.id) {
       console.error("User data or motivation is missing.");
       return;
     }
-  
+
     const applicationData = {
-      userId: userData.id,    
-      advertisementId: adID,  
-      motivation: formData.motivation
+      userId: userData.id,
+      advertisementId: adID,
+      motivation: formData.motivation,
     };
-  
+
     fetch("http://localhost:3001/api/application/apply", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(applicationData)
+      body: JSON.stringify(applicationData),
     })
       .then((response) => response.json())
       .then((data) => {
         if (data.message) {
-            setSubmitted(true);
+          // La candidature a été soumise, maintenant on envoie l'email
+          fetch("http://localhost:3001/api/application/sendApplication", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(applicationData),
+          })
+            .then((response) => response.json())
+            .then((emailData) => {
+              if (emailData.success) {
+                console.log("Email envoyé avec succès !");
+              } else {
+                console.error(
+                  "Erreur lors de l'envoi de l'email :",
+                  emailData.error
+                );
+              }
+            })
+            .catch((error) => {
+              console.error(
+                "Erreur lors de la requête d'envoi de l'email :",
+                error
+              );
+            });
+          setSubmitted(true);
         }
       })
       .catch((error) => {
         console.error("Error submitting application:", error);
       });
   };
-  
+
   if (submitted) {
     return <h3>Thank you for your application!</h3>;
   }
 
   return (
-    <div className = "application">
+    <div className="application">
       <h2>Application</h2>
-      {alreadyApplied && <p style={{"color":"rgb(208, 8, 8)", "fontSize":"12px", "textAlign": "center"}}><i>You have already applied for this offer.</i></p>}
+      {alreadyApplied && (
+        <p
+          style={{
+            color: "rgb(208, 8, 8)",
+            fontSize: "12px",
+            textAlign: "center",
+          }}
+        >
+          <i>You have already applied for this offer.</i>
+        </p>
+      )}
       <form onSubmit={handleSubmit}>
         <div>
           <input
@@ -155,7 +193,10 @@ function Application({ userData, adID }) {
           <label htmlFor="location">(City)</label>
         </div>
         <div>
-          <label htmlFor="motivation">Please describe your motivation, tell us about your skills and background:</label>
+          <label htmlFor="motivation">
+            Please describe your motivation, tell us about your skills and
+            background:
+          </label>
           <textarea
             id="motivation"
             name="motivation"
@@ -165,7 +206,7 @@ function Application({ userData, adID }) {
             required
           />
         </div>
-        <div className = "submit-container">
+        <div className="submit-container">
           <button type="submit">Send</button>
         </div>
       </form>
