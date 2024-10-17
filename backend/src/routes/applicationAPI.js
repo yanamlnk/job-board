@@ -95,22 +95,26 @@ router.get("/clientApplications", (req, res) => {
 
 // Route pour envoyer un email après une candidature
 router.post("/sendApplication", (req, res) => {
-  const { clientId, advertisementId, motivation } = req.body;
+  const {
+    userId,
+    advertisementId,
+    motivation,
+    name,
+    lastName,
+    email,
+    phoneNumber,
+    location,
+  } = req.body;
 
-  // Requête pour récupérer les informations de l'annonce
-  const queryAdvertisement = `
+  const query = `
     SELECT advertisements.title, companies.name AS companyName, advertisements.location
     FROM advertisements
     JOIN companies ON advertisements.company = companies.id
     WHERE advertisements.id = ?
   `;
 
-  db.query(queryAdvertisement, [advertisementId], (err, results) => {
+  db.query(query, [advertisementId], (err, results) => {
     if (err || results.length === 0) {
-      console.error(
-        "Erreur lors de la récupération des informations de l'annonce:",
-        err
-      );
       return res
         .status(500)
         .json({ error: "Erreur lors de la récupération de l'annonce" });
@@ -118,42 +122,44 @@ router.post("/sendApplication", (req, res) => {
 
     const advertisement = results[0];
 
-    // Créer le transporteur Nodemailer
+    // Configuration de Nodemailer
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: "jobs.epitech@gmail.com",
-        pass: "AxelYana2024",
+        pass: "sysryspdouzvhnts",
       },
     });
 
-    // Contenu de l'email
+    // Contenu de l'email avec les informations du client et de l'annonce
     const mailOptions = {
-      from: "jobs.epitech@gmail.com",
-      to: "axelh33@hotmail.fr",
+      from: "jobs.epitech@gmail.com", // Ton adresse email
+      to: "axelh33@hotmail.fr", // Adresse du destinataire
       subject: "Nouvelle Candidature",
       text: `
         Un client a postulé à une offre d'emploi.
 
         Informations du client :
+        - Nom : ${name} ${lastName}
+        - Email : ${email}
+        - Téléphone : ${phoneNumber}
+        - Localisation : ${location}
         - Motivation : ${motivation}
 
-        Informations de l'annonce :
+        Détails de l'annonce :
         - Titre de l'annonce : ${advertisement.title}
         - Entreprise : ${advertisement.companyName}
         - Localisation : ${advertisement.location}
       `,
     };
 
-    // Envoyer l'email
+    // Envoi de l'email
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error("Erreur lors de l'envoi de l'email :", error);
         return res
           .status(500)
           .json({ error: "Erreur lors de l'envoi de l'email" });
       }
-      console.log("Email envoyé :", info.response);
       res.json({ success: true, message: "Email envoyé avec succès" });
     });
   });
