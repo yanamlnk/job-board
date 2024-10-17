@@ -30,6 +30,7 @@ background-color: transparent;
 font-size: 16px;
 outline: none;
 text-align: center;
+font: 14px 'Noticia Text', serif;
 }
 
 .signup-form input:-webkit-autofill,
