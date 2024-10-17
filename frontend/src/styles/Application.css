@@ -30,6 +30,14 @@
   text-align: center;
 }
 
+.application input:-webkit-autofill,
+.application textarea:-webkit-autofill {
+  background-color: transparent !important;
+  -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
+  box-shadow: 0 0 0 1000px transparent inset !important;
+  -webkit-text-fill-color: #000 !important; /* Change text color if needed */
+}
+
 .application textarea {
   border: 1px solid #000000;
   padding: 10px;

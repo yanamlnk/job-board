@@ -67,49 +67,49 @@ function SignUpForm({handleLogInActive}) {
   }
 
   return (
-    <>
+    <div className = "signup-form">
       <form className={"signUpForm"} onSubmit={handleSubmit}>
-        <label>Sign Up</label>
+        <h2>Sign Up</h2>
         <input
           type="text"
           name="name"
-          placeholder="First Name"
           value={signUpData.name}
           onChange={handleChange}
           required
         />
+        <label htmlFor="name">(Name)</label>
         <input
           type="text"
           name="lastName"
-          placeholder="Last Name"
           value={signUpData.lastName}
           onChange={handleChange}
           required
         />
+        <label htmlFor="lastName">(Surname)</label>
         <input
           type="email"
           name="email"
-          placeholder="Email"
           value={signUpData.email}
           onChange={handleChange}
           required
         />
+        <label htmlFor="email">(Email)</label>
         <input
           type="password"
           name="password"
-          placeholder="Password"
           value={signUpData.password}
           onChange={handleChange}
           required
         />
+        <label htmlFor="password">(Password)</label>
         <input
           type="tel"
           name="phoneNumber"
-          placeholder="Phone Number"
           value={signUpData.phoneNumber}
           onChange={handleChange}
           required
         />
+        <label htmlFor="phoneNumber">(Phone)</label>
         {/* <input
         type="text"
         name="profilPicture"
@@ -120,23 +120,23 @@ function SignUpForm({handleLogInActive}) {
         <input
           type="date"
           name="birthDate"
-          placeholder="Birth Date"
           value={signUpData.birthDate}
           onChange={handleChange}
           required
         />
+        <label htmlFor="birthDate">(Date of Birth)</label>
         <input
           type="text"
           name="location"
-          placeholder="Location"
           value={signUpData.location}
           onChange={handleChange}
           required
         />
-        <button type="submit">Sign Up</button>
+        <label htmlFor="location">(City)</label>
+        <div className = "signup-submit-container"><button type="submit">Sign Up</button></div>
+        {error && errorMessage(error)}
       </form>
-      {error && errorMessage(error)}
-    </>
+    </div>
   );
 }
 
