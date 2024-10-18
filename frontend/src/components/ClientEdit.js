@@ -102,71 +102,71 @@ function ClientEdit() {
   };
 
   return (
-    <div className={"Container"}>
-      <form className={"EditForm"} onSubmit={handleEdit}>
-        <label>Personal data</label>
+    <div className={"client-edit"}>
+      <form className = "update-data" onSubmit={handleEdit}>
+        <h2>Personal data</h2>
         <input
           type="text"
           name="name"
-          placeholder="First Name"
           value={editData.name}
           onChange={handleChange}
         />
+        <label htmlFor="name">(Name)</label>
         <input
           type="text"
           name="lastName"
-          placeholder="Last Name"
           value={editData.lastName}
           onChange={handleChange}
         />
+        <label htmlFor="lastName">(Surname)</label>
         <input
           type="email"
           name="email"
-          placeholder="Email"
           value={editData.email}
           onChange={handleChange}
         />
+        <label htmlFor="email">(Email)</label>
         <input
           type="tel"
           name="phoneNumber"
-          placeholder="Phone Number"
           value={editData.phoneNumber}
           onChange={handleChange}
         />
+        <label htmlFor="phoneNumber">(Phone)</label>
         <input
           type="text"
           name="location"
-          placeholder="Location"
           value={editData.location}
           onChange={handleChange}
         />
-        <button type="submit">Save Changes</button>
+        <label htmlFor="location">(City)</label>
+        <div className = "clientedit-submit-container"><button type="submit">Save Changes</button></div>
       </form>
 
-      <form className={"ChangePassword"} onSubmit={handleChangePassword}>
-        <label>Change Password</label>
+      <form className="change-password" onSubmit={handleChangePassword}>
+        <h2>Change Password</h2>
         <input
           type="password"
           name="password"
-          placeholder="Current Password"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
         />
+        <label htmlFor="password">(Current Password)</label>
         <input
           type="password"
           name="password"
-          placeholder="New Password"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />{" "}
+        <label htmlFor="password">(New Password)</label>
         <input
           type="password"
           name="password"
-          placeholder="Confirm Password"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <button type="submit">Change Password</button>
+        <label htmlFor="password">(Confirm Password)</label>
+        <div className = "clientedit-submit-container"><button type="submit">Change Password</button></div>
       </form>
     </div>
   );

@@ -4,6 +4,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { useNavigate } from "react-router-dom";
 import ClientApplicationList from "../components/ClientApplicationList";
+import "../styles/Client.css";
 
 function Client() {
   const navigate = useNavigate();
@@ -15,8 +16,10 @@ function Client() {
   return (
     <div>
       <Header />
-      <ClientEdit />
-      <ClientApplicationList />
+      <div className = "client-page">
+        <ClientEdit />
+        <ClientApplicationList />
+      </div>
       <Footer />
     </div>
   );
