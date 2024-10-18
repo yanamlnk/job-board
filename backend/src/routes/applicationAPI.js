@@ -53,7 +53,7 @@ router.post("/check-application", (req, res) => {
   });
 });
 
-// Route pour récupérer les candidatures d'un client
+// Route pour qu'un client récupère toutes ses applications
 router.get("/clientApplications", (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
 
@@ -162,6 +162,87 @@ router.post("/sendApplication", (req, res) => {
       }
       res.json({ success: true, message: "Email envoyé avec succès" });
     });
+  });
+});
+
+// Route pour que l'admin récupère toutes les candidatures
+router.get("/applications", (req, res) => {
+  const query = `
+    SELECT applications.id, 
+           applications.clientId, 
+           IF(applications.clientId = -1, 'Client Inconnu', clients.name) AS clientName, 
+           applications.advertisementId, 
+           applications.motivation, 
+           advertisements.title AS adTitle
+    FROM applications
+    LEFT JOIN clients ON applications.clientId = clients.id
+    JOIN advertisements ON applications.advertisementId = advertisements.id
+  `;
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la récupération des candidatures:", err);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la récupération des candidatures" });
+    }
+    res.json(results);
+  });
+});
+
+// Route pour récupérer les emails des clients
+router.get("/clients/emails", (req, res) => {
+  const query = "SELECT id, email FROM clients";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la récupération des emails des clients:", err);
+      return res.status(500).json({ error: "Erreur lors de la récupération des emails des clients" });
+    }
+    res.json(results);
+  });
+});
+
+// Route pour que l'admin puisse créer des candidatures
+router.post("/applications", (req, res) => {
+  const { clientId, advertisementId, motivation } = req.body;
+  const query = `INSERT INTO applications (clientId, advertisementId, motivation) VALUES (?, ?, ?)`;
+  db.query(query, [clientId, advertisementId, motivation], (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la création de la candidature:", err);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la création de la candidature" });
+    }
+    res.status(201).json({ message: "Candidature créée avec succès" });
+  });
+});
+
+router.put("/applications/:id", (req, res) => {
+  const { id } = req.params;
+  const { motivation } = req.body;
+  const query = `UPDATE applications SET motivation = ? WHERE id = ?`;
+  db.query(query, [motivation, id], (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la mise à jour de la candidature:", err);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la mise à jour de la candidature" });
+    }
+    res.status(200).json({ message: "Candidature mise à jour avec succès" });
+  });
+});
+
+// Route pour que l'admin puisse supprimer une candidature
+router.delete("/applications/:id", (req, res) => {
+  const { id } = req.params;
+  const query = `DELETE FROM applications WHERE id = ?`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la suppression de la candidature:", err);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la suppression de la candidature" });
+    }
+    res.status(200).json({ message: "Candidature supprimée avec succès" });
   });
 });
 
