@@ -27,6 +27,7 @@ function ClientApplicationList() {
   return (
     <div className = "client-application">
       <h1>Mes Candidatures</h1>
+      {applications.length === 0 && <p style={{textAlign:"center"}}>You don't have any applications yet.</p>}
       <ul>
         {applications.map((application) => (
           <li key={application.id}>

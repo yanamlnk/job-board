@@ -7,11 +7,29 @@ const Header = () => {
   //default value is false
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState([]);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem('userToken');
     if (token) {
       setIsLoggedIn(true);
+
+      fetch("http://localhost:3001/api/admin/verify", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+          if (response.ok) {
+            setIsAdmin(true);
+          }
+      })
+      .catch((error) => {
+          console.error("Somethign went wrong:", error);
+      });
+
       fetch("http://localhost:3001/api/client/Client", {
         method: "GET",
         headers: {
@@ -40,7 +58,11 @@ const Header = () => {
   };
 
   const handleMyCabinet = () => {
-    navigate("/client");
+    if (isAdmin) {
+      navigate("/admin");
+    } else {
+      navigate("/client");
+    }
   };
 
   const handleLogout = () => {
@@ -73,7 +95,6 @@ const Header = () => {
             {location.pathname === '/admin' && (
               <>
               <button onClick={handleHome}>Home</button>
-              <button onClick={handleMyCabinet}>My Cabinet</button>
               </>
             )}
               <button onClick={handleLogout}>Log Out</button>
