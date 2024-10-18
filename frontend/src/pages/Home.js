@@ -46,7 +46,7 @@ function Home() {
   });
   return (
     <div className="home">
-      <Header name = {userData.name}/>
+      <Header/>
       <div className="container_advertisements">{ads}</div>
       <Footer />
     </div>

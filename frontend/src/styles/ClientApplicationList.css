@@ -1,0 +1,25 @@
+.client-application {
+    flex: 70%;
+    box-sizing: border-box;
+}
+
+.client-application ul {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 570px) {
+    .client-application ul {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 1024px) {
+    .client-application ul {
+        grid-template-columns: 2fr;
+    }
+
+    .client-application {
+        flex: 55%;
+    }
+}

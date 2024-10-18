@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../styles/ClientApplicationList.css";
 
 function ClientApplicationList() {
   const [applications, setApplications] = useState([]);
@@ -24,7 +25,7 @@ function ClientApplicationList() {
   }, []);
 
   return (
-    <div>
+    <div className = "client-application">
       <h1>Mes Candidatures</h1>
       <ul>
         {applications.map((application) => (

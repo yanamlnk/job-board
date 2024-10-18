@@ -1,19 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "../resources/Icon.png";
 import "../styles/Header.css";
 
-const Header = (props) => {
+const Header = () => {
   //default value is false
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem("userToken");
+    const token = localStorage.getItem('userToken');
     if (token) {
       setIsLoggedIn(true);
-    }
+      fetch("http://localhost:3001/api/client/Client", {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => setUserData(data))
+        .catch((error) => console.error("Erreur:", error)); 
+    }  
   }, []);
+
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleHome = () => {
     navigate("/");
@@ -50,9 +62,20 @@ const Header = (props) => {
       >
         {isLoggedIn ? (
           <>
-            <span>Hello, {props.name}!</span>
+            <span>Hello, {userData.name}!</span>
             <div>
+            {location.pathname === '/' && (
               <button onClick={handleMyCabinet}>My Cabinet</button>
+            )}
+            {location.pathname === '/client' && (
+              <button onClick={handleHome}>Home</button>
+            )}
+            {location.pathname === '/admin' && (
+              <>
+              <button onClick={handleHome}>Home</button>
+              <button onClick={handleMyCabinet}>My Cabinet</button>
+              </>
+            )}
               <button onClick={handleLogout}>Log Out</button>
             </div>
           </>
