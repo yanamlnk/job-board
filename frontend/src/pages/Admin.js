@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import AdminClient from "../components/AdminClient";
 import AdminCompany from "../components/AdminCompany";
 import AdminAdvertisement from "../components/AdminAdvertisement";
+import AdminApplication from "../components/AdminApplication";
 
 function Admin() {
   const navigate = useNavigate();
@@ -38,6 +39,7 @@ function Admin() {
   return (
     <div>
       <h1>Bienvenue sur la page Admin</h1>
+      <AdminApplication />
       <AdminCompany />
       <AdminAdvertisement />
       <AdminClient />

@@ -53,7 +53,7 @@ router.post("/check-application", (req, res) => {
   });
 });
 
-// Route pour récupérer les candidatures d'un client
+// Route pour qu'un client récupère toutes ses applications
 router.get("/clientApplications", (req, res) => {
   const token = req.headers["authorization"]?.split(" ")[1];
 
@@ -95,22 +95,26 @@ router.get("/clientApplications", (req, res) => {
 
 // Route pour envoyer un email après une candidature
 router.post("/sendApplication", (req, res) => {
-  const { clientId, advertisementId, motivation } = req.body;
+  const {
+    userId,
+    advertisementId,
+    motivation,
+    name,
+    lastName,
+    email,
+    phoneNumber,
+    location,
+  } = req.body;
 
-  // Requête pour récupérer les informations de l'annonce
-  const queryAdvertisement = `
+  const query = `
     SELECT advertisements.title, companies.name AS companyName, advertisements.location
     FROM advertisements
     JOIN companies ON advertisements.company = companies.id
     WHERE advertisements.id = ?
   `;
 
-  db.query(queryAdvertisement, [advertisementId], (err, results) => {
+  db.query(query, [advertisementId], (err, results) => {
     if (err || results.length === 0) {
-      console.error(
-        "Erreur lors de la récupération des informations de l'annonce:",
-        err
-      );
       return res
         .status(500)
         .json({ error: "Erreur lors de la récupération de l'annonce" });
@@ -118,44 +122,127 @@ router.post("/sendApplication", (req, res) => {
 
     const advertisement = results[0];
 
-    // Créer le transporteur Nodemailer
+    // Configuration de Nodemailer
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
         user: "jobs.epitech@gmail.com",
-        pass: "AxelYana2024",
+        pass: "sysryspdouzvhnts",
       },
     });
 
-    // Contenu de l'email
+    // Contenu de l'email avec les informations du client et de l'annonce
     const mailOptions = {
-      from: "jobs.epitech@gmail.com",
-      to: "axelh33@hotmail.fr",
+      from: "jobs.epitech@gmail.com", // Ton adresse email
+      to: "axelh33@hotmail.fr", // Adresse du destinataire
       subject: "Nouvelle Candidature",
       text: `
         Un client a postulé à une offre d'emploi.
 
         Informations du client :
+        - Nom : ${name} ${lastName}
+        - Email : ${email}
+        - Téléphone : ${phoneNumber}
+        - Localisation : ${location}
         - Motivation : ${motivation}
 
-        Informations de l'annonce :
+        Détails de l'annonce :
         - Titre de l'annonce : ${advertisement.title}
         - Entreprise : ${advertisement.companyName}
         - Localisation : ${advertisement.location}
       `,
     };
 
-    // Envoyer l'email
+    // Envoi de l'email
     transporter.sendMail(mailOptions, (error, info) => {
       if (error) {
-        console.error("Erreur lors de l'envoi de l'email :", error);
         return res
           .status(500)
           .json({ error: "Erreur lors de l'envoi de l'email" });
       }
-      console.log("Email envoyé :", info.response);
       res.json({ success: true, message: "Email envoyé avec succès" });
     });
+  });
+});
+
+// Route pour que l'admin récupère toutes les candidatures
+router.get("/applications", (req, res) => {
+  const query = `
+    SELECT applications.id, 
+           applications.clientId, 
+           IF(applications.clientId = -1, 'Client Inconnu', clients.name) AS clientName, 
+           applications.advertisementId, 
+           applications.motivation, 
+           advertisements.title AS adTitle
+    FROM applications
+    LEFT JOIN clients ON applications.clientId = clients.id
+    JOIN advertisements ON applications.advertisementId = advertisements.id
+  `;
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la récupération des candidatures:", err);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la récupération des candidatures" });
+    }
+    res.json(results);
+  });
+});
+
+// Route pour récupérer les emails des clients
+router.get("/clients/emails", (req, res) => {
+  const query = "SELECT id, email FROM clients";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error("Erreur lors de la récupération des emails des clients:", err);
+      return res.status(500).json({ error: "Erreur lors de la récupération des emails des clients" });
+    }
+    res.json(results);
+  });
+});
+
+// Route pour que l'admin puisse créer des candidatures
+router.post("/applications", (req, res) => {
+  const { clientId, advertisementId, motivation } = req.body;
+  const query = `INSERT INTO applications (clientId, advertisementId, motivation) VALUES (?, ?, ?)`;
+  db.query(query, [clientId, advertisementId, motivation], (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la création de la candidature:", err);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la création de la candidature" });
+    }
+    res.status(201).json({ message: "Candidature créée avec succès" });
+  });
+});
+
+router.put("/applications/:id", (req, res) => {
+  const { id } = req.params;
+  const { motivation } = req.body;
+  const query = `UPDATE applications SET motivation = ? WHERE id = ?`;
+  db.query(query, [motivation, id], (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la mise à jour de la candidature:", err);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la mise à jour de la candidature" });
+    }
+    res.status(200).json({ message: "Candidature mise à jour avec succès" });
+  });
+});
+
+// Route pour que l'admin puisse supprimer une candidature
+router.delete("/applications/:id", (req, res) => {
+  const { id } = req.params;
+  const query = `DELETE FROM applications WHERE id = ?`;
+  db.query(query, [id], (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la suppression de la candidature:", err);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la suppression de la candidature" });
+    }
+    res.status(200).json({ message: "Candidature supprimée avec succès" });
   });
 });
 

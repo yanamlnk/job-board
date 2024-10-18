@@ -79,4 +79,23 @@ router.delete("/:id", (req, res) => {
   });
 });
 
+// Route pour récupérer les titres des annonces
+router.get("/titles", (req, res) => {
+  const query = "SELECT id, title FROM advertisements";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(
+        "Erreur lors de la récupération des titres des annonces:",
+        err
+      );
+      return res
+        .status(500)
+        .json({
+          error: "Erreur lors de la récupération des titres des annonces",
+        });
+    }
+    res.json(results);
+  });
+});
+
 module.exports = router;
