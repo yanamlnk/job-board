@@ -284,4 +284,23 @@ router.put("/changePassword/changePassword", (req, res) => {
     });
   });
 });
+
+// Route pour récupérer les emails des clients
+router.get("/emails", (req, res) => {
+  const query = "SELECT id, email FROM clients";
+  db.query(query, (err, results) => {
+    if (err) {
+      console.error(
+        "Erreur lors de la récupération des emails des clients:",
+        err
+      );
+      return res
+        .status(500)
+        .json({
+          error: "Erreur lors de la récupération des emails des clients",
+        });
+    }
+    res.json(results);
+  });
+});
 module.exports = router;

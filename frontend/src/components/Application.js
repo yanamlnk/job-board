@@ -72,6 +72,11 @@ function Application({ userData, adID }) {
       userId: userData.id,
       advertisementId: adID,
       motivation: formData.motivation,
+      name: formData.name,
+      lastName: formData.lastName,
+      email: formData.email,
+      phoneNumber: formData.phoneNumber,
+      location: formData.location,
     };
 
     fetch("http://localhost:3001/api/application/apply", {

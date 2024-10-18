@@ -5,6 +5,7 @@ import AdminCompany from "../components/AdminCompany";
 import AdminAdvertisement from "../components/AdminAdvertisement";
 import Header from "../components/Header";
 import "../styles/Admin.css";
+import AdminApplication from "../components/AdminApplication";
 
 function Admin() {
   const navigate = useNavigate();
@@ -82,7 +83,7 @@ function Admin() {
       {companiesActive && <AdminCompany />}
       {advertisementsActive && <AdminAdvertisement />}
       {clientsActive && <AdminClient />}
-      {applicationsActive && <p>Working on Applications</p>}
+      {applicationsActive && <AdminApplication />}
     </div>
   );
 }
