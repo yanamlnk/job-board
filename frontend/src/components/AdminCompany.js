@@ -83,12 +83,20 @@ function AdminCompany() {
   };
 
   const handleDeleteCompany = (id) => {
-    fetch(`http://localhost:3001/api/company/${id}`, {
+    fetch(`http://localhost:3001/api/advertisement/byCompany/${id}`, {
       method: "DELETE",
     })
-      .then(() => fetchCompanies()) // Récupérer la liste des entreprises après suppression
+      .then(() => {
+        return fetch(`http://localhost:3001/api/company/${id}`, {
+          method: "DELETE",
+        });
+      })
+      .then(() => fetchCompanies())
       .catch((error) =>
-        console.error("Erreur lors de la suppression de l'entreprise:", error)
+        console.error(
+          "Erreur lors de la suppression des annonces ou de l'entreprise:",
+          error
+        )
       );
   };
 

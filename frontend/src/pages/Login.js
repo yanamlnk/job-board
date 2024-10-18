@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import SignUpForm from "../components/SignUp";
 import SignInForm from "../components/SignIn";
 import "../styles/Login.css";
@@ -11,39 +11,43 @@ function Login() {
   const location = useLocation();
   const [logInActive, setLogInActive] = useState(false);
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   useEffect(() => {
-    if(localStorage.getItem("userToken")) {
+    if (localStorage.getItem("userToken")) {
       navigate("/");
     }
     const mode = location.state?.mode;
-    if (mode === 'login') {
+    if (mode === "login") {
       setLogInActive(true);
-    } else if (mode === 'signup') {
+    } else if (mode === "signup") {
       setLogInActive(false);
     }
-  }, [location]);
+  }, [location, navigate]);
 
   const handleLogInActive = (value) => {
     setLogInActive(value);
-  }
+  };
 
   const handleHomeReturn = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
 
   return (
     <div className="login-container">
-      <div className = "login-redline"></div>
-      <img src={icon} alt="icon" className="login-icon"/>
-      <div className = "buttons-container">
+      <div className="login-redline"></div>
+      <img src={icon} alt="icon" className="login-icon" />
+      <div className="buttons-container">
         <button onClick={() => handleLogInActive(true)}>Log In</button>
         <button onClick={() => handleLogInActive(false)}>Sign Up</button>
         <button onClick={handleHomeReturn}>Home</button>
       </div>
-      {logInActive ? <SignInForm handleLogInActive={handleLogInActive}/> : <SignUpForm handleLogInActive={handleLogInActive}/>}
-      <img src={car} alt="car" className="car-icon"/>
+      {logInActive ? (
+        <SignInForm handleLogInActive={handleLogInActive} />
+      ) : (
+        <SignUpForm handleLogInActive={handleLogInActive} />
+      )}
+      <img src={car} alt="car" className="car-icon" />
     </div>
   );
 }
