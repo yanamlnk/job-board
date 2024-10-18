@@ -4,17 +4,35 @@ const router = express.Router();
 const nodemailer = require("nodemailer");
 
 router.post("/apply", (req, res) => {
-  const { userId, advertisementId, motivation } = req.body;
+  const {
+    userId,
+    advertisementId,
+    motivation,
+    name,
+    lastName,
+    email,
+    phoneNumber,
+    location,
+  } = req.body;
 
   if (!userId || !advertisementId || !motivation) {
     return res.status(400).json({ error: "Missing required fields" });
   }
 
   const query = `
-      INSERT INTO applications (clientId, advertisementId, motivation)
-      VALUES (?, ?, ?)
+      INSERT INTO applications (clientId, name, lastName, email, phoneNumber, location, advertisementId, motivation)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-  const values = [userId, advertisementId, motivation];
+  const values = [
+    userId,
+    name,
+    lastName,
+    email,
+    phoneNumber,
+    location,
+    advertisementId,
+    motivation,
+  ];
 
   db.query(query, values, (err, result) => {
     if (err) {
@@ -168,14 +186,8 @@ router.post("/sendApplication", (req, res) => {
 // Route pour que l'admin récupère toutes les candidatures
 router.get("/applications", (req, res) => {
   const query = `
-    SELECT applications.id, 
-           applications.clientId, 
-           IF(applications.clientId = -1, 'Client Inconnu', clients.name) AS clientName, 
-           applications.advertisementId, 
-           applications.motivation, 
-           advertisements.title AS adTitle
+    SELECT applications.*, advertisements.title AS adTitle
     FROM applications
-    LEFT JOIN clients ON applications.clientId = clients.id
     JOIN advertisements ON applications.advertisementId = advertisements.id
   `;
   db.query(query, (err, results) => {
@@ -194,8 +206,13 @@ router.get("/clients/emails", (req, res) => {
   const query = "SELECT id, email FROM clients";
   db.query(query, (err, results) => {
     if (err) {
-      console.error("Erreur lors de la récupération des emails des clients:", err);
-      return res.status(500).json({ error: "Erreur lors de la récupération des emails des clients" });
+      console.error(
+        "Erreur lors de la récupération des emails des clients:",
+        err
+      );
+      return res.status(500).json({
+        error: "Erreur lors de la récupération des emails des clients",
+      });
     }
     res.json(results);
   });
@@ -203,33 +220,89 @@ router.get("/clients/emails", (req, res) => {
 
 // Route pour que l'admin puisse créer des candidatures
 router.post("/applications", (req, res) => {
-  const { clientId, advertisementId, motivation } = req.body;
-  const query = `INSERT INTO applications (clientId, advertisementId, motivation) VALUES (?, ?, ?)`;
-  db.query(query, [clientId, advertisementId, motivation], (err, result) => {
-    if (err) {
-      console.error("Erreur lors de la création de la candidature:", err);
-      return res
-        .status(500)
-        .json({ error: "Erreur lors de la création de la candidature" });
+  const {
+    name,
+    lastName,
+    email,
+    phoneNumber,
+    location,
+    advertisementId,
+    motivation,
+  } = req.body;
+  const query = `
+    INSERT INTO applications (name, lastName, email, phoneNumber, location, advertisementId, motivation)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `;
+  db.query(
+    query,
+    [name, lastName, email, phoneNumber, location, advertisementId, motivation],
+    (err, result) => {
+      if (err) {
+        console.error("Erreur lors de l'ajout de la candidature:", err);
+        return res
+          .status(500)
+          .json({ error: "Erreur lors de l'ajout de la candidature" });
+      }
+      res.json({ message: "Candidature ajoutée avec succès!" });
     }
-    res.status(201).json({ message: "Candidature créée avec succès" });
-  });
+  );
 });
+
+// Route pour modifier les applications
 
 router.put("/applications/:id", (req, res) => {
   const { id } = req.params;
-  const { motivation } = req.body;
-  const query = `UPDATE applications SET motivation = ? WHERE id = ?`;
-  db.query(query, [motivation, id], (err, result) => {
-    if (err) {
-      console.error("Erreur lors de la mise à jour de la candidature:", err);
-      return res
-        .status(500)
-        .json({ error: "Erreur lors de la mise à jour de la candidature" });
+  const {
+    name,
+    lastName,
+    email,
+    phoneNumber,
+    location,
+    advertisementId,
+    motivation,
+  } = req.body;
+  const query = `
+    UPDATE applications
+    SET name = ?, lastName = ?, email = ?, phoneNumber = ?, location = ?, advertisementId = ?, motivation = ?
+    WHERE id = ?
+  `;
+  db.query(
+    query,
+    [
+      name,
+      lastName,
+      email,
+      phoneNumber,
+      location,
+      advertisementId,
+      motivation,
+      id,
+    ],
+    (err, result) => {
+      if (err) {
+        console.error("Erreur lors de la mise à jour de la candidature:", err);
+        return res
+          .status(500)
+          .json({ error: "Erreur lors de la mise à jour de la candidature" });
+      }
+      res.json({ message: "Candidature mise à jour avec succès!" });
     }
-    res.status(200).json({ message: "Candidature mise à jour avec succès" });
-  });
+  );
 });
+// router.put("/applications/:id", (req, res) => {
+//   const { id } = req.params;
+//   const { motivation } = req.body;
+//   const query = `UPDATE applications SET motivation = ? WHERE id = ?`;
+//   db.query(query, [motivation, id], (err, result) => {
+//     if (err) {
+//       console.error("Erreur lors de la mise à jour de la candidature:", err);
+//       return res
+//         .status(500)
+//         .json({ error: "Erreur lors de la mise à jour de la candidature" });
+//     }
+//     res.status(200).json({ message: "Candidature mise à jour avec succès" });
+//   });
+// });
 
 // Route pour que l'admin puisse supprimer une candidature
 router.delete("/applications/:id", (req, res) => {
