@@ -14,6 +14,9 @@ function Login() {
   const navigate = useNavigate(); 
 
   useEffect(() => {
+    if(localStorage.getItem("userToken")) {
+      navigate("/");
+    }
     const mode = location.state?.mode;
     if (mode === 'login') {
       setLogInActive(true);

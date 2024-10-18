@@ -147,25 +147,25 @@ function ClientEdit() {
         <h2>Change Password</h2>
         <input
           type="password"
-          name="password"
+          name="currentPassword"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
         />
-        <label htmlFor="password">(Current Password)</label>
+        <label htmlFor="currentPassword">(Current Password)</label>
         <input
           type="password"
-          name="password"
+          name="newPassword"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
         />{" "}
-        <label htmlFor="password">(New Password)</label>
+        <label htmlFor="newPassword">(New Password)</label>
         <input
           type="password"
-          name="password"
+          name="confirmPassword"
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
-        <label htmlFor="password">(Confirm Password)</label>
+        <label htmlFor="confirmPassword">(Confirm Password)</label>
         <div className = "clientedit-submit-container"><button type="submit">Change Password</button></div>
       </form>
     </div>
