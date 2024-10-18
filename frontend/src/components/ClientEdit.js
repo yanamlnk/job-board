@@ -103,7 +103,7 @@ function ClientEdit() {
 
   return (
     <div className={"client-edit"}>
-      <form className = "update-data" onSubmit={handleEdit}>
+      <form className="update-data" onSubmit={handleEdit}>
         <h2>Personal data</h2>
         <input
           type="text"
@@ -140,7 +140,9 @@ function ClientEdit() {
           onChange={handleChange}
         />
         <label htmlFor="location">(City)</label>
-        <div className = "clientedit-submit-container"><button type="submit">Save Changes</button></div>
+        <div className="clientedit-submit-container">
+          <button type="submit">Save Changes</button>
+        </div>
       </form>
 
       <form className="change-password" onSubmit={handleChangePassword}>
@@ -166,7 +168,9 @@ function ClientEdit() {
           onChange={(e) => setConfirmPassword(e.target.value)}
         />
         <label htmlFor="confirmPassword">(Confirm Password)</label>
-        <div className = "clientedit-submit-container"><button type="submit">Change Password</button></div>
+        <div className="clientedit-submit-container">
+          <button type="submit">Change Password</button>
+        </div>
       </form>
     </div>
   );
