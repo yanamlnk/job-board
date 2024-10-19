@@ -63,8 +63,8 @@ function Application({ userData, adID }) {
       userData.id = -1;
     }
 
-    if (!formData.motivation || !userData.id) {
-      console.error("User data or motivation is missing.");
+    if (!formData.motivation) {
+      console.error("Motivation is missing.");
       return;
     }
 
@@ -78,7 +78,7 @@ function Application({ userData, adID }) {
       phoneNumber: formData.phoneNumber,
       location: formData.location,
     };
-
+    console.log(applicationData);
     fetch("http://localhost:3001/api/application/apply", {
       method: "POST",
       headers: {

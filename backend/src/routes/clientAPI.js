@@ -172,7 +172,6 @@ router.delete("/:id", (req, res) => {
 
 const authentificateToken = (req, res, next) => {
   const token = req.headers["authorization"]?.split(" ")[1];
-  // console.log("voici le token : ", token);
   if (!token) {
     return res
       .status(401)
@@ -186,7 +185,6 @@ const authentificateToken = (req, res, next) => {
         .json({ error: "Client non trouvé ou token invalide" });
     }
     req.client = results[0];
-    // console.log(req.client);
     next();
   });
 };
@@ -294,11 +292,9 @@ router.get("/emails", (req, res) => {
         "Erreur lors de la récupération des emails des clients:",
         err
       );
-      return res
-        .status(500)
-        .json({
-          error: "Erreur lors de la récupération des emails des clients",
-        });
+      return res.status(500).json({
+        error: "Erreur lors de la récupération des emails des clients",
+      });
     }
     res.json(results);
   });

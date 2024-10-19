@@ -4,13 +4,12 @@ import Logo from "../resources/Icon.png";
 import "../styles/Header.css";
 
 const Header = () => {
-  //default value is false
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userData, setUserData] = useState([]);
   const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('userToken');
+    const token = localStorage.getItem("userToken");
     if (token) {
       setIsLoggedIn(true);
 
@@ -54,11 +53,11 @@ const Header = () => {
   };
 
   const handleLogin = () => {
-    navigate("/login", { state: { mode: 'login' } });
+    navigate("/login", { state: { mode: "login" } });
   };
 
   const handleSignUp = () => {
-    navigate("/login", { state: { mode: 'signup' } });
+    navigate("/login", { state: { mode: "signup" } });
   };
 
   const handleMyCabinet = () => {
@@ -90,17 +89,17 @@ const Header = () => {
           <>
             <span>Hello, {userData.name}!</span>
             <div>
-            {location.pathname === '/' && (
-              <button onClick={handleMyCabinet}>My Cabinet</button>
-            )}
-            {location.pathname === '/client' && (
-              <button onClick={handleHome}>Home</button>
-            )}
-            {location.pathname === '/admin' && (
-              <>
-              <button onClick={handleHome}>Home</button>
-              </>
-            )}
+              {location.pathname === "/" && (
+                <button onClick={handleMyCabinet}>My Cabinet</button>
+              )}
+              {location.pathname === "/client" && (
+                <button onClick={handleHome}>Home</button>
+              )}
+              {location.pathname === "/admin" && (
+                <>
+                  <button onClick={handleHome}>Home</button>
+                </>
+              )}
               <button onClick={handleLogout}>Log Out</button>
             </div>
           </>

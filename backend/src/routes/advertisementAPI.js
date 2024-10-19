@@ -1,5 +1,5 @@
 const express = require("express");
-const db = require("../db"); // Connexion à la base de données
+const db = require("../db");
 const router = express.Router();
 
 // 1. Récupérer toutes les annonces
@@ -79,6 +79,25 @@ router.delete("/:id", (req, res) => {
   });
 });
 
+// Route pour supprimer toutes les annonces associées à une entreprise
+router.delete("/byCompany/:companyId", (req, res) => {
+  const { companyId } = req.params;
+  const query = "DELETE FROM advertisements WHERE company = ?";
+
+  db.query(query, [companyId], (err, result) => {
+    if (err) {
+      console.error("Erreur lors de la suppression des annonces:", err);
+      return res
+        .status(500)
+        .json({ error: "Erreur lors de la suppression des annonces" });
+    }
+    res.json({
+      message:
+        "Toutes les annonces associées à l'entreprise ont été supprimées",
+    });
+  });
+});
+
 // Route pour récupérer les titres des annonces
 router.get("/titles", (req, res) => {
   const query = "SELECT id, title FROM advertisements";
@@ -88,11 +107,9 @@ router.get("/titles", (req, res) => {
         "Erreur lors de la récupération des titres des annonces:",
         err
       );
-      return res
-        .status(500)
-        .json({
-          error: "Erreur lors de la récupération des titres des annonces",
-        });
+      return res.status(500).json({
+        error: "Erreur lors de la récupération des titres des annonces",
+      });
     }
     res.json(results);
   });
