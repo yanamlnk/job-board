@@ -59,6 +59,7 @@
     outline: none;
     text-align: center;
     font: 14px 'Noticia Text', serif;
+    color: black;
 }
   
 .admin-client-container input:-webkit-autofill,
@@ -66,7 +67,10 @@
     background-color: transparent !important;
     -webkit-box-shadow: 0 0 0 1000px transparent inset !important;
     box-shadow: 0 0 0 1000px transparent inset !important;
-    -webkit-text-fill-color: #000 !important; /* Change text color if needed */
+    -webkit-text-fill-color: black !important; /* Change text color if needed */
+}
+.admin-client-container input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1); /* Ensure the calendar icon is visible */
 }
   
 .admin-client-container button[type="submit"] {
