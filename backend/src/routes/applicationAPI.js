@@ -151,8 +151,8 @@ router.post("/sendApplication", (req, res) => {
 
     // Contenu de l'email avec les informations du client et de l'annonce
     const mailOptions = {
-      from: "jobs.epitech@gmail.com", // Ton adresse email
-      to: "axelh33@hotmail.fr", // Adresse du destinataire
+      from: "jobs.epitech@gmail.com",
+      to: "axelh33@hotmail.fr",
       subject: "Nouvelle Candidature",
       text: `
         Un client a postulé à une offre d'emploi.
@@ -221,6 +221,7 @@ router.get("/clients/emails", (req, res) => {
 // Route pour que l'admin puisse créer des candidatures
 router.post("/applications", (req, res) => {
   const {
+    clientId,
     name,
     lastName,
     email,
@@ -230,12 +231,21 @@ router.post("/applications", (req, res) => {
     motivation,
   } = req.body;
   const query = `
-    INSERT INTO applications (name, lastName, email, phoneNumber, location, advertisementId, motivation)
-    VALUES (?, ?, ?, ?, ?, ?, ?)
+    INSERT INTO applications (clientId, name, lastName, email, phoneNumber, location, advertisementId, motivation)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
   `;
   db.query(
     query,
-    [name, lastName, email, phoneNumber, location, advertisementId, motivation],
+    [
+      clientId,
+      name,
+      lastName,
+      email,
+      phoneNumber,
+      location,
+      advertisementId,
+      motivation,
+    ],
     (err, result) => {
       if (err) {
         console.error("Erreur lors de l'ajout de la candidature:", err);
@@ -289,20 +299,6 @@ router.put("/applications/:id", (req, res) => {
     }
   );
 });
-// router.put("/applications/:id", (req, res) => {
-//   const { id } = req.params;
-//   const { motivation } = req.body;
-//   const query = `UPDATE applications SET motivation = ? WHERE id = ?`;
-//   db.query(query, [motivation, id], (err, result) => {
-//     if (err) {
-//       console.error("Erreur lors de la mise à jour de la candidature:", err);
-//       return res
-//         .status(500)
-//         .json({ error: "Erreur lors de la mise à jour de la candidature" });
-//     }
-//     res.status(200).json({ message: "Candidature mise à jour avec succès" });
-//   });
-// });
 
 // Route pour que l'admin puisse supprimer une candidature
 router.delete("/applications/:id", (req, res) => {
