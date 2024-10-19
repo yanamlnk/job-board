@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../styles/AdminCompany.css";
 
 function AdminCompany() {
   const [companies, setCompanies] = useState([]);
@@ -7,6 +8,9 @@ function AdminCompany() {
     location: "",
   });
   const [editFormData, setEditFormData] = useState(null);
+  const [addCompanyMenu, setAddCompanyMenu] = useState(false);
+  const [listCompanies, setListCompanies] = useState(true);
+  const [editCompanyId, setEditCompanyId] = useState(null);
 
   useEffect(() => {
     fetchCompanies();
@@ -56,12 +60,26 @@ function AdminCompany() {
   };
 
   const handleEditCompany = (company) => {
-    setEditFormData({
-      id: company.id,
-      name: company.name,
-      location: company.location,
-    });
+    if (editCompanyId === company.id) {
+      setEditCompanyId(null);
+      // setEditFormData(null);
+    } else {
+      setEditFormData({
+        id: company.id,
+        name: company.name,
+        location: company.location,
+      });
+      setEditCompanyId(company.id);
+    }
   };
+
+  const toggleAddCompanyMenu = () => {
+    setAddCompanyMenu(!addCompanyMenu);
+  }
+
+  const toggleListCompanies = () => {
+    setListCompanies(!listCompanies);
+  }  
 
   const handleUpdateCompany = (e) => {
     e.preventDefault();
@@ -76,6 +94,7 @@ function AdminCompany() {
       .then(() => {
         fetchCompanies();
         setEditFormData(null);
+        setEditCompanyId(null);
       })
       .catch((error) =>
         console.error("Erreur lors de la mise à jour de l'entreprise:", error)
@@ -86,73 +105,82 @@ function AdminCompany() {
     fetch(`http://localhost:3001/api/company/${id}`, {
       method: "DELETE",
     })
-      .then(() => fetchCompanies()) // Récupérer la liste des entreprises après suppression
+      .then(() => {
+        fetchCompanies();
+      }) // Récupérer la liste des entreprises après suppression
       .catch((error) =>
         console.error("Erreur lors de la suppression de l'entreprise:", error)
       );
   };
 
   return (
-    <div>
-      <h1>Gérer les entreprises</h1>
-
-      <h2>Liste des entreprises</h2>
-      <ul>
-        {companies.map((company) => (
-          <li key={company.id}>
-            <div>
-              <strong>{company.name}</strong> - {company.location}
-            </div>
-            <button onClick={() => handleEditCompany(company)}>Modifier</button>
-            <button onClick={() => handleDeleteCompany(company.id)}>
-              Supprimer
-            </button>
-          </li>
-        ))}
-      </ul>
-
-      {/* Formulaire de modification d'une entreprise */}
-      {editFormData && (
-        <div>
-          <h2>Modifier l'entreprise : {editFormData.name}</h2>
-          <form onSubmit={handleUpdateCompany}>
-            <input
-              name="name"
-              placeholder="Nom"
-              value={editFormData.name}
-              onChange={handleEditChange}
-              required
-            />
-            <input
-              name="location"
-              placeholder="Localisation"
-              value={editFormData.location}
-              onChange={handleEditChange}
-              required
-            />
-            <button type="submit">Mettre à jour</button>
-          </form>
-        </div>
-      )}
-      {/* Formulaire de création d'une entreprise */}
-      <h2>Ajouter une nouvelle entreprise</h2>
+    <div className = "admin-company-container">
+      <h1>Manage companies</h1>
+      <div className = "admin-company-navigation">
+        <button onClick={toggleAddCompanyMenu}>{addCompanyMenu ? "Close Add Menu" : "Add Company"}</button>
+        <button onClick={toggleListCompanies}>{listCompanies ? "Close List" : "List Companies"}</button>
+      </div>
+      {addCompanyMenu && <div className = "admin-add-company">
+        <h2>Add New Company</h2>
       <form onSubmit={handleCreateCompany}>
         <input
           name="name"
-          placeholder="Nom"
           value={formData.name}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="name">(Name)</label>
         <input
           name="location"
-          placeholder="Localisation"
           value={formData.location}
           onChange={handleCreateChange}
           required
         />
-        <button type="submit">Ajouter Entreprise</button>
+        <label htmlFor="location">(Location)</label>
+        <div className="admin-company-submit-container"><button type="submit">Save</button></div>
       </form>
+      </div>}
+
+      {listCompanies && <>
+        <h2>List of companies</h2>
+      <div className = "list-companies-container">
+        {companies.map((company) => (
+          <div className = {`list-companies-background ${editCompanyId === company.id ? "large" : ""}`} key={company.id}>
+            <div>
+              <p><strong>{company.name}</strong></p><p>{company.location}</p>
+            </div>
+            <div className = "company-buttons-container">
+            <button onClick={() => handleEditCompany(company)}>{editCompanyId === company.id ? "Close" : "Edit"}</button>
+            <button onClick={() => handleDeleteCompany(company.id)}>
+              Delete
+            </button>
+            </div>
+            {editCompanyId === company.id && (
+            <div>
+              <form onSubmit={handleUpdateCompany}>
+              <h2>Edit company: {editFormData.name}</h2>
+                <input
+                  name="name"
+                  value={editFormData.name}
+                  onChange={handleEditChange}
+                  required
+                />
+                <label htmlFor="name">(Name)</label>
+                <input
+                  name="location"
+                  value={editFormData.location}
+                  onChange={handleEditChange}
+                  required
+                />
+                <label htmlFor="location">(Location)</label>
+                <div className="admin-company-submit-container"><button type="submit">Update</button></div>
+              </form>
+            </div>
+          )}
+          </div>
+        ))}
+      </div>
+      </>}
     </div>
   );
 }

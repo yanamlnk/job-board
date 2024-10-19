@@ -119,4 +119,15 @@
   }
 }
 
+.transition-container {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease, visibility 0.5s ease;
+}
+
+.transition-container.active {
+  opacity: 1;
+  visibility: visible;
+}
+
 

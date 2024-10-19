@@ -49,29 +49,33 @@ function Advertisement(props) {
             <button onClick={toggleShowDescription}>Learn More</button>
           )}
         </div>
-        {showDescription && (
-          <div className="description">
-            <h2>Description</h2>
-            <p>{props.description}</p>
-            <p>
-              <b>Salary:</b> {props.salary}€
-            </p>
-            <p>
-              <b>Date of post:</b> {formatDate(props.date)}
-            </p>
-            <button onClick={toggleElements} className="apply-button">
-              Apply
-            </button>
-          </div>
-        )}
-        {showApplication && (
-          <div>
-            <Application userData={props.userData} adID={props.adID} />
-            <button onClick={toggleElements} className="apply-button">
-              Description
-            </button>
-          </div>
-        )}
+        <div className={`transition-container ${showDescription ? 'active' : ''}`}>
+          {showDescription && (
+            <div className="description">
+              <h2>Description</h2>
+              <p>{props.description}</p>
+              <p>
+                <b>Salary:</b> {props.salary}€
+              </p>
+              <p>
+                <b>Date of post:</b> {formatDate(props.date)}
+              </p>
+              <button onClick={toggleElements} className="apply-button">
+                Apply
+              </button>
+            </div>
+          )}
+        </div>
+        <div className={`transition-container ${showApplication ? 'active' : ''}`}>
+          {showApplication && (
+            <div>
+              <Application userData={props.userData} adID={props.adID} />
+              <button onClick={toggleElements} className="apply-button">
+                Description
+              </button>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

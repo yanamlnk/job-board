@@ -45,7 +45,7 @@ router.post("/", (req, res) => {
     const query = "DELETE FROM companies WHERE id = ?";
     db.query(query, [id], (err, result) => {
       if (err) {
-        return res.status(500).json({ error: "Erreur lors de la suppression de l'entreprise" });
+        return res.status(500).json({ error: "Erreur lors de la suppression de l'entreprise" + err });
       }
       res.json({ message: "Entreprise supprimée avec succès!" });
     });

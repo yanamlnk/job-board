@@ -22,9 +22,9 @@ const Header = () => {
         },
       })
       .then((response) => {
-          if (response.ok) {
-            setIsAdmin(true);
-          }
+        if (response.ok) {
+          setIsAdmin(true);
+        }
       })
       .catch((error) => {
           console.error("Somethign went wrong:", error);
@@ -37,7 +37,11 @@ const Header = () => {
         },
       })
         .then((response) => response.json())
-        .then((data) => setUserData(data))
+        .then((data) => {
+          if (data) {
+            setUserData(data);
+          }
+        })
         .catch((error) => console.error("Erreur:", error)); 
     }  
   }, []);
