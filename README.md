@@ -6,18 +6,18 @@ The frontend is built using **React**, while the backend is built using **Node.j
 
 ### Navigation:
 1. [Frontend](#frontend)
-    1.1. [Technologies](#technologies-1)
-    1.2. [Directory Structure](#directory-structure)
-    1.3. [UI Overview](#ui-overview)
-    1.4. [Routing Details](#routing-details)
+    - [Technologies](#technologies-1)
+    - [Directory Structure](#directory-structure)
+    - [UI Overview](#ui-overview)
+    - [Routing Details](#routing-details)
 2. [Backend](#backend)
-    2.1. [Technologies](#technologies-2)
-    2.2. [Directory Structure](#directory-structure-1)
-    2.3. [Endpoints](#endpoints)
+    - [Technologies](#technologies-2)
+    - [Directory Structure](#directory-structure-1)
+    - [Endpoints](#endpoints)
 3. [Package Management](#package-management)
 4. [Database](#database)
-    4.1. [Technologies](#technologies-3)
-    4.2. [Tables](#tables)
+    - [Technologies](#database-technologies)
+    - [Tables](#tables)
 5. [Running the Project](#running-the-project)
 
 ## Frontend
@@ -43,15 +43,20 @@ General vibe of the website: newspaper.
 **Login page (`http://localhost:3000/login`)**
 
 Navigation to change between `Log In`/ `Sign Up` forms, or button `Home` to return home:
+
 <img width="338" alt="image" src="https://github.com/user-attachments/assets/3426b30d-40fd-4c3b-9aaa-848a6de5c6fc">
 
 `Log In` form to log in as already existing user:
+
 <img width="343" alt="image" src="https://github.com/user-attachments/assets/7300dba0-34a3-4fd8-87a7-939f965a986b">
+
 > [!NOTE]
 > If users tries to log in with unknown email, informational message will appear below the form with a link to sign up form
 
 `Sign Up` form to sign up as a new user:
+
 <img width="574" alt="image" src="https://github.com/user-attachments/assets/03240095-45a2-46b2-bad6-ca608200bb74">
+
 > [!NOTE]
 > If user tries to sign up with already used email, informational message will appear below the form with a link to log in form
 
@@ -59,18 +64,23 @@ Navigation to change between `Log In`/ `Sign Up` forms, or button `Home` to retu
 **Home page (`http://localhost:3000/`)**
 
 Header with dynamic buttons: when user is logged out, the buttons are `Log In` or `Sign Up`:
+
 <img width="748" alt="image" src="https://github.com/user-attachments/assets/ca3e8cdb-c379-4e7b-b98d-c1002245d74b">
 
 When user is logged in: short message `Hi, [name]!` with buttons `My Cabinet` and `Log Out`:
+
 <img width="743" alt="image" src="https://github.com/user-attachments/assets/b1908a5a-e7b5-45cd-9433-d98cc8642542">
 
 Footter:
+
 <img width="742" alt="image" src="https://github.com/user-attachments/assets/0dec4710-d2e1-4cf1-ab3d-daae0e6d610d">
 
 Body with advertisements: for computer screen - 5 advertisements in one row, tablet - 3, mobile - 1: 
+
 <img width="1423" alt="image" src="https://github.com/user-attachments/assets/5f33c56d-5aa2-4547-9571-a6f1bcb645a1">
 
 Advertisement with short information. `Learn more` button to open description, once it is opened, button changes to `Close` to close everything. `Apply` button in description to apply for this offer, once form is opened, button changes to `Description` button to come back to desctiption:
+
 <img width="436" alt="image" src="https://github.com/user-attachments/assets/32a73654-d983-41b7-a0df-f6723cf25bcb">
 
 > [!NOTE]
@@ -82,20 +92,25 @@ Advertisement with short information. `Learn more` button to open description, o
 **Personal space page (`http://localhost:3000/client`)**
 
 Header button `My Cabinet` changes to `Home`:
+
 <img width="648" alt="image" src="https://github.com/user-attachments/assets/00c0b39c-584a-48fe-9b03-ca512939adba">
 
 In body on the left two form to change personal information and password, on the right - list of all applications made by this user:
+
 <img width="1423" alt="image" src="https://github.com/user-attachments/assets/e731688c-5595-4a09-bc7c-f3876d43fc69">
 
 **Admin page(`http://localhost:3000/admin`)**
 
 On the top - navigation corresponding to each entity: `Companies`, `Clients`, `Advertisements` and `Applications`:
+
 <img width="427" alt="image" src="https://github.com/user-attachments/assets/c4f3aa02-646b-4c80-b28a-eae0960da0a1">
 
 Management page of each entity follows the same structure. On the top there is a title to specify which entity in question is open. 2 buttons below: `Add [entity]` - to open the the form and create new entity. When the form is open, button dynamically changes to `Close Add Menu` button in order to close the form. `List [entity]` - to open the list of all already existing records of the specific entity. If list is open, button is changed to `Close List`:
+
 <img width="852" alt="image" src="https://github.com/user-attachments/assets/a050e530-f19a-4738-b4f3-6908e542eca7">
 
 Each element of entity follows the same pattern: short description with 2 button: `Edit` and `Delete`. `Edit` button will open a form to edit the specific element, `Delete` will delete specific element (**with no prior confirmation for deletion!!**):
+
 <img width="277" alt="image" src="https://github.com/user-attachments/assets/65093962-9897-47ea-ace5-58b7fbdf253a">
 
 ### Routing details
@@ -121,7 +136,6 @@ Each element of entity follows the same pattern: short description with 2 button
 
 ### Endpoints
 
-Navigation:
 ## Navigation
 
 1. [adminAPI.js](#adminapijs)
@@ -129,8 +143,8 @@ Navigation:
     - [POST /verify](#post-verify)
     - [Example usage](#example-usage-1)
 2. [advertisementAPI.js](#advertisementapijs)
-    - [GET /](#get-1)
-    - [POST /](#post-1)
+    - [GET /](#get)
+    - [POST /](#post)
     - [PUT /:id](#put-id)
     - [DELETE /:id](#delete-id)
     - [DELETE /byCompany/:companyId](#delete-bycompanycompanyid)
@@ -183,6 +197,8 @@ This endpoint handles the sign-in process for admins. It verifies the admin's em
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -216,7 +232,9 @@ This endpoint verifies the admin's authentication token. It checks if the provid
 - URL: /verify
 - Method: POST
 - Headers: `Authorization: Bearer <token>`
-- Response:
+- Response
+
+  
 **Success (200)**
 ```
 {
@@ -261,7 +279,9 @@ This endpoint retrieves all advertisements along with the associated company nam
 **Request**
 - URL: /
 - Method: GET
-- Response 
+- Response
+
+  
 **Success (200)**
 ```
 [
@@ -306,6 +326,8 @@ This endpoint adds a new advertisement.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -338,6 +360,8 @@ This endpoint updates an advertisement by ID.
 }
 ```
 - Response
+
+
 **Success (200)**
 ```
 {
@@ -358,6 +382,8 @@ This endpoint deletes an advertisement by ID.
 - URL: /:id
 - Method: DELETE
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -377,6 +403,8 @@ This endpoint deletes all advertisements associated with a specific company.
 - URL: /byCompany/:companyId
 - Method: DELETE
 - Response
+
+
 **Success (200)**
 ```
 {
@@ -396,6 +424,8 @@ This endpoint retrieves the titles of all advertisements.
 - URL: /titles
 - Method: GET
 - Response
+
+
 **Success (200)**
 ```
 [
@@ -485,6 +515,8 @@ This endpoint allows a user to apply for an advertisement.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -519,6 +551,8 @@ This endpoint checks if a user has already applied for a specific advertisement.
 }
 ```
 - Response:
+
+
 **Success (200): Already applied**
 ```
 {
@@ -552,6 +586,8 @@ This endpoint retrieves all applications made by a client.
 - Method: GET
 - Headers: `Authorization: Bearer <token>`
 - Response:
+
+  
 **Success (200)**
 ```
   {
@@ -604,6 +640,8 @@ This endpoint sends an email after a user applies for an advertisement.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -631,6 +669,8 @@ This endpoint retrieves all applications for the admin.
 - URL: /applications
 - Method: GET
 - Response:
+
+
 **Success (200)**
 ```
 [
@@ -663,6 +703,8 @@ This endpoint retrieves the emails of all clients.
 - URL: /clients/emails
 - Method: GET
 - Response:
+
+
 **Success (200)**
 ```
 [
@@ -700,6 +742,8 @@ This endpoint allows the admin to create applications.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -733,6 +777,8 @@ This endpoint updates an application by ID.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -753,6 +799,8 @@ This endpoint deletes an application by ID.
 - URL: /applications/:id
 - Method: DELETE
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -878,6 +926,8 @@ This endpoint handles the sign-in process for clients. It verifies the client's 
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -924,6 +974,8 @@ This endpoint handles the sign-up process for clients. It registers a new client
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -951,6 +1003,8 @@ This endpoint retrieves all clients.
 - URL: /
 - Method: GET
 - Response:
+
+
 **Success (200)**
 ```
 [
@@ -994,6 +1048,8 @@ This endpoint allows an admin to update a client's information by ID.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -1021,6 +1077,8 @@ This endpoint deletes a client by ID.
 - URL: /:id
 - Method: DELETE
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -1042,6 +1100,8 @@ This endpoint retrieves the authenticated client's information.
 - Method: GET
 - Headers: `Authorization: Bearer <token>`
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -1087,6 +1147,8 @@ This endpoint allows a client to update their own information.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -1122,6 +1184,8 @@ This endpoint allows a client to change their password.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -1161,6 +1225,8 @@ This endpoint retrieves the emails of all clients.
 - URL: /emails
 - Method: GET
 - Response:
+
+
 **Success (200)**
 ```
 [
@@ -1274,6 +1340,8 @@ This endpoint retrieves all companies.
 - URL: /
 - Method: GET
 - Response:
+
+
 **Success (200)**
 ```
 [
@@ -1307,6 +1375,8 @@ This endpoint adds a new company.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -1335,6 +1405,8 @@ This endpoint updates a company by ID.
 }
 ```
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -1355,6 +1427,8 @@ This endpoint deletes a company by ID.
 - URL: /:id
 - Method: DELETE
 - Response:
+
+
 **Success (200)**
 ```
 {
@@ -1408,9 +1482,9 @@ Yarn is used as the package manager for both the frontend and backend. It helps 
 - Localhost: 3306
 
 > [!NOTE]
-> To manage database directly, we have used 2 tools
-> Terminal, using command `mysql -u root -p` to open MySQL CLI, and use SQL queries there directly
-> XAMPP, which gives access to endpoint localhost/phpmyadmin, where you have a UI to manage database.
+> To manage database directly, we have used 2 tools: 
+> (1) Terminal, using command `mysql -u root -p` to open MySQL CLI, and use SQL queries there directly. 
+> (2) XAMPP, which gives access to endpoint localhost/phpmyadmin, where you have a UI to manage database.
 
 ### Tables
 
@@ -1502,10 +1576,8 @@ Yarn is used as the package manager for both the frontend and backend. It helps 
 ```
 
 ## Running the Project
-1. Start server
-
-Depending on the operating system, you can start MySQL server by different commands in terminal:
-Linux:
+1. Start server. Depending on the operating system, you can start MySQL server by different commands in terminal:
+- Linux:
 ```
 sudo service mysql start
 ```
@@ -1514,26 +1586,24 @@ or
 sudo systemctl start mysql
 ```
 
-Windows (as an administrator):
+- Windows (as an administrator):
 ```
 net start MySQL
 ```
 
-Mac (with Homebrew):
+- Mac (with Homebrew):
 ```
 brew services start mysql
 ```
 
-2. Backend
-To run the backend, navigate to the backend directory and use the following commands:
+2. Backend. To run the backend, navigate to the backend directory and use the following commands:
 
 ```
 yarn install
 yarn dev
 ```
 
-3. Frontend
-To run the frontend, navigate to the frontend directory and use the following commands:
+3. Frontend. To run the frontend, navigate to the frontend directory and use the following commands:
 
 ```
 yarn install
