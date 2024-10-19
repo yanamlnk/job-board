@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../styles/AdminAdvertisement.css";
 
 function AdminAdvertisement() {
   const [advertisements, setAdvertisements] = useState([]);
@@ -13,6 +14,10 @@ function AdminAdvertisement() {
     postDate: "",
   });
   const [editFormData, setEditFormData] = useState(null);
+
+  const [addAdvertisementMenu, setAddAdvertisementMenu] = useState(false);
+  const [listAdvertisements, setListAdvertisements] = useState(true);
+  const [editAdvertisementId, setEditAdvertisementId] = useState(null);
 
   useEffect(() => {
     fetchAdvertisements();
@@ -84,17 +89,32 @@ function AdminAdvertisement() {
     const formattedPostDate = advertisement.postDate
       ? advertisement.postDate.split("T")[0]
       : "";
-    setEditFormData({
-      id: advertisement.id,
-      title: advertisement.title,
-      description: advertisement.description,
-      company: advertisement.company,
-      location: advertisement.location,
-      contract: advertisement.contract,
-      salary: advertisement.salary,
-      postDate: formattedPostDate,
-    });
+
+    if (editAdvertisementId === advertisement.id) {
+        setEditAdvertisementId(null);
+        // setEditFormData(null);
+    } else {
+      setEditFormData({
+        id: advertisement.id,
+        title: advertisement.title,
+        description: advertisement.description,
+        company: advertisement.company,
+        location: advertisement.location,
+        contract: advertisement.contract,
+        salary: advertisement.salary,
+        postDate: formattedPostDate,
+      });
+      setEditAdvertisementId(advertisement.id);
+    }  
   };
+
+  const toggleAddAdvertisementMenu = () => {
+    setAddAdvertisementMenu(!addAdvertisementMenu);
+  }
+
+  const toggleListAdvertisements = () => {
+    setListAdvertisements(!listAdvertisements);
+  } 
 
   const handleUpdateAdvertisement = (e) => {
     e.preventDefault();
@@ -126,142 +146,66 @@ function AdminAdvertisement() {
   };
 
   return (
-    <div>
-      <h1>Gérer les annonces</h1>
-      <h2>Liste des annonces</h2>
-      <ul>
-        {advertisements.map((ad) => (
-          <li key={ad.id}>
-            <div>
-              <strong>{ad.title}</strong> ({ad.companyName}) - {ad.location}
-            </div>
-            <button onClick={() => handleEditAdvertisement(ad)}>
-              Modifier
-            </button>
-            <button onClick={() => handleDeleteAdvertisement(ad.id)}>
-              Supprimer
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className = "admin-advertisement-container">
+      <h1>Manage Advertisements</h1>
+      <div className = "admin-advertisement-navigation">
+        <button onClick={toggleAddAdvertisementMenu}>{addAdvertisementMenu ? "Close Add Menu" : "Add Advertisement"}</button>
+        <button onClick={toggleListAdvertisements}>{listAdvertisements ? "Close List" : "List Advertisements"}</button>
+      </div>
 
-      {/* Formulaire de modification d'une annonce */}
-      {editFormData && (
-        <div>
-          <h2>Modifier l'annonce : {editFormData.title}</h2>
-          <form onSubmit={handleUpdateAdvertisement}>
-            <input
-              name="title"
-              placeholder="Titre"
-              value={editFormData.title}
-              onChange={handleEditChange}
-              required
-            />
-            <textarea
-              name="description"
-              placeholder="Description"
-              value={editFormData.description}
-              onChange={handleEditChange}
-              required
-            />
-            <select
-              name="company"
-              value={editFormData.company}
-              onChange={handleEditChange}
-              required
-            >
-              <option value="">Sélectionnez une entreprise</option>
-              {companies.map((company) => (
-                <option key={company.id} value={company.id}>
-                  {company.name}
-                </option>
-              ))}
-            </select>
-            <input
-              name="location"
-              placeholder="Localisation"
-              value={editFormData.location}
-              onChange={handleEditChange}
-              required
-            />
-            <input
-              name="contract"
-              placeholder="Type de contrat"
-              value={editFormData.contract}
-              onChange={handleEditChange}
-              required
-            />
-            <input
-              name="salary"
-              type="number"
-              placeholder="Salaire"
-              value={editFormData.salary}
-              onChange={handleEditChange}
-              required
-            />
-            <input
-              name="postDate"
-              type="date"
-              value={editFormData.postDate}
-              onChange={handleEditChange}
-              required
-            />
-            <button type="submit">Mettre à jour</button>
-          </form>
-        </div>
-      )}
-      {/* Formulaire de création d'une annonce */}
-      <h2>Ajouter une nouvelle annonce</h2>
+      {addAdvertisementMenu && <div className = "admin-add-advertisement">
+      <h2>Add New Advertisement</h2>
       <form onSubmit={handleCreateAdvertisement}>
         <input
           name="title"
-          placeholder="Titre"
           value={formData.title}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="title">(Title)</label>
         <textarea
           name="description"
-          placeholder="Description"
           value={formData.description}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="description">(Description)</label>
         <select
           name="company"
           value={formData.company}
           onChange={handleCreateChange}
           required
         >
-          <option value="">Sélectionnez une entreprise</option>
+          <option value="">Choose a company</option>
           {companies.map((company) => (
             <option key={company.id} value={company.id}>
               {company.name}
             </option>
           ))}
         </select>
+        <label htmlFor="company">(Company)</label>
         <input
           name="location"
-          placeholder="Localisation"
           value={formData.location}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="location">(City)</label>
         <input
           name="contract"
-          placeholder="Type de contrat"
           value={formData.contract}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="contract">(Contract Type)</label>
         <input
           name="salary"
           type="number"
-          placeholder="Salaire"
           value={formData.salary}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="salary">(Salary)</label>
         <input
           name="postDate"
           type="date"
@@ -269,8 +213,98 @@ function AdminAdvertisement() {
           onChange={handleCreateChange}
           required
         />
-        <button type="submit">Ajouter Annonce</button>
+        <label htmlFor="postDate">(Post Date)</label>
+        <div className="admin-advertisement-submit-container"><button type="submit">Add</button></div>
       </form>
+      </div>}
+
+      {listAdvertisements && <>    
+      <h2>List of Advertisements</h2>
+      <div className = "list-advertisements-container">
+        {advertisements.map((ad) => (
+          <div className = {`list-advertisements-background ${editAdvertisementId === ad.id ? "large" : ""}`} key={ad.id}>
+            <div>
+              <p><strong>{ad.title}</strong></p> <p>{ad.companyName}</p> <p>{ad.location}</p>
+            </div>
+            <div className = "company-buttons-container">
+            <button onClick={() => handleEditAdvertisement(ad)}>
+              {editAdvertisementId === ad.id ? "Close" : "Edit"}
+            </button>
+            <button onClick={() => handleDeleteAdvertisement(ad.id)}>
+              Delete
+            </button>
+            </div>
+            {editAdvertisementId === ad.id && (
+            <div>
+              <h2>Edit Advertisement: {editFormData.title}</h2>
+              <form onSubmit={handleUpdateAdvertisement}>
+                <input
+                  name="title"
+                  value={editFormData.title}
+                  onChange={handleEditChange}
+                  required
+                />
+                <label htmlFor="title">(Title)</label>
+                <textarea
+                  name="description"
+                  placeholder="Description"
+                  value={editFormData.description}
+                  onChange={handleEditChange}
+                  required
+                />
+                <label htmlFor="description">(Description)</label>
+                <select
+                  name="company"
+                  value={editFormData.company}
+                  onChange={handleEditChange}
+                  required
+                >
+                <option value="">Choose company</option>
+                  {companies.map((company) => (
+                    <option key={company.id} value={company.id}>
+                      {company.name}
+                    </option>
+                  ))}
+                </select>
+                <label htmlFor="company">(Company)</label>
+                <input
+                  name="location"
+                  value={editFormData.location}
+                  onChange={handleEditChange}
+                  required
+                />
+                <label htmlFor="location">(City)</label>
+                <input
+                  name="contract"
+                  value={editFormData.contract}
+                  onChange={handleEditChange}
+                  required
+                />
+                <label htmlFor="contract">(Contract Type)</label>
+                <input
+                  name="salary"
+                  type="number"
+                  value={editFormData.salary}
+                  onChange={handleEditChange}
+                  required
+                />
+                <label htmlFor="salary">(Salary)</label>
+                <input
+                  name="postDate"
+                  type="date"
+                  value={editFormData.postDate}
+                  onChange={handleEditChange}
+                  required
+                />
+                <label htmlFor="postDate">(Post Date)</label>
+                <div className="admin-advertisement-submit-container"><button type="submit">Update</button></div>
+              </form>
+            </div>
+            )}
+        </div>
+        ))}
+      </div>
+      </>}  
     </div>
   );
 }

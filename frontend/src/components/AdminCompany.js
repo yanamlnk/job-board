@@ -121,7 +121,7 @@ function AdminCompany() {
 
   return (
     <div className = "admin-company-container">
-      <h1>Manage companies</h1>
+      <h1>Manage Companies</h1>
       <div className = "admin-company-navigation">
         <button onClick={toggleAddCompanyMenu}>{addCompanyMenu ? "Close Add Menu" : "Add Company"}</button>
         <button onClick={toggleListCompanies}>{listCompanies ? "Close List" : "List Companies"}</button>
@@ -148,8 +148,8 @@ function AdminCompany() {
       </div>}
 
       {listCompanies && <>
-        <h2>List of companies</h2>
-      <div className = "list-companies-container">
+        <h2>List of Companies</h2>
+        <div className = "list-companies-container">
         {companies.map((company) => (
           <div className = {`list-companies-background ${editCompanyId === company.id ? "large" : ""}`} key={company.id}>
             <div>
