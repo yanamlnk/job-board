@@ -129,6 +129,7 @@ function AdminAdvertisement() {
       .then(() => {
         fetchAdvertisements(); // Récupérer la liste des annonces après mise à jour
         setEditFormData(null); // Réinitialiser le formulaire de modification
+        setEditAdvertisementId(null);
       })
       .catch((error) =>
         console.error("Erreur lors de la mise à jour de l'annonce:", error)
@@ -226,7 +227,7 @@ function AdminAdvertisement() {
             <div>
               <p><strong>{ad.title}</strong></p> <p>{ad.companyName}</p> <p>{ad.location}</p>
             </div>
-            <div className = "company-buttons-container">
+            <div className = "advertisement-buttons-container">
             <button onClick={() => handleEditAdvertisement(ad)}>
               {editAdvertisementId === ad.id ? "Close" : "Edit"}
             </button>

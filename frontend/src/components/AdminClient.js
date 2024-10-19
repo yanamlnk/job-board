@@ -131,6 +131,7 @@ function AdminClient() {
       .then(() => {
         fetchClients();
         setEditFormData(null);
+        setEditClientId(null);
       })
       .catch((error) =>
         console.error("Erreur lors de la mise à jour du client:", error)
