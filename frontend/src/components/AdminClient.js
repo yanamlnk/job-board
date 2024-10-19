@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import "../styles/AdminClient.css";
 
 function AdminClient() {
   const [clients, setClients] = useState([]);
@@ -12,6 +13,9 @@ function AdminClient() {
     password: "",
   });
   const [editFormData, setEditFormData] = useState(null); // Stocker les données à modifier
+  const [addClientMenu, setAddClientMenu] = useState(false);
+  const [listClients, setListClients] = useState(true);
+  const [editClientId, setEditClientId] = useState(null);
 
   useEffect(() => {
     fetchClients();
@@ -84,16 +88,30 @@ function AdminClient() {
       ? client.birthDate.split("T")[0]
       : "";
 
-    setEditFormData({
-      id: client.id,
-      name: client.name,
-      lastName: client.lastName,
-      email: client.email,
-      phoneNumber: client.phoneNumber,
-      birthDate: formattedBirthDate,
-      location: client.location,
-    });
+    if (editClientId === client.id) {
+        setEditClientId(null);
+        // setEditFormData(null);
+    } else {
+      setEditFormData({
+        id: client.id,
+        name: client.name,
+        lastName: client.lastName,
+        email: client.email,
+        phoneNumber: client.phoneNumber,
+        birthDate: formattedBirthDate,
+        location: client.location,
+      });
+        setEditClientId(client.id);
+    }
   };
+
+  const toggleAddClientMenu = () => {
+    setAddClientMenu(!addClientMenu);
+  }
+
+  const toggleListClients = () => {
+    setListClients(!listClients);
+  } 
 
   const handleUpdateClient = (e) => {
     e.preventDefault();
@@ -113,6 +131,7 @@ function AdminClient() {
       .then(() => {
         fetchClients();
         setEditFormData(null);
+        setEditClientId(null);
       })
       .catch((error) =>
         console.error("Erreur lors de la mise à jour du client:", error)
@@ -132,109 +151,45 @@ function AdminClient() {
   };
 
   return (
-    <>
-      <h2>Liste des clients</h2>
-      <ul>
-        {clients.map((client) => (
-          <li key={client.id}>
-            <div style={{ fontWeight: "bold" }}>
-              {client.name} {client.lastName} - {client.email}
-            </div>
-            <button onClick={() => handleEditClient(client)}>Modifier</button>
-            <button onClick={() => handleDeleteClient(client.id)}>
-              Supprimer
-            </button>
-          </li>
-        ))}
-      </ul>
+    <div className = "admin-client-container">
+      <h1>Manage Clients</h1>
+      <div className = "admin-client-navigation">
+        <button onClick={toggleAddClientMenu}>{addClientMenu ? "Close Add Menu" : "Add Client"}</button>
+        <button onClick={toggleListClients}>{listClients ? "Close List" : "List Clients"}</button>
+      </div>
 
-      {/* Formulaire de modification d'un client */}
-      {editFormData && (
-        <div>
-          <h2>
-            Modifier les informations du client : {editFormData.name}{" "}
-            {editFormData.lastName}
-          </h2>
-          <form onSubmit={handleUpdateClient}>
-            <input
-              name="name"
-              placeholder="Nom"
-              value={editFormData.name}
-              onChange={handleEditChange}
-              required
-            />
-            <input
-              name="lastName"
-              placeholder="Prénom"
-              value={editFormData.lastName}
-              onChange={handleEditChange}
-              required
-            />
-            <input
-              name="email"
-              type="email"
-              placeholder="Email"
-              value={editFormData.email}
-              onChange={handleEditChange}
-              required
-            />
-            <input
-              name="phoneNumber"
-              placeholder="Numéro de téléphone"
-              value={editFormData.phoneNumber}
-              onChange={handleEditChange}
-              required
-            />
-            <input
-              name="birthDate"
-              type="date"
-              value={editFormData.birthDate}
-              onChange={handleEditChange}
-              required
-            />
-            <input
-              name="location"
-              placeholder="Localisation"
-              value={editFormData.location}
-              onChange={handleEditChange}
-              required
-            />
-            <button type="submit">Mettre à jour</button>
-          </form>
-        </div>
-      )}
-      {/* Formulaire de création d'un client */}
-      <h2>Ajouter un nouveau client</h2>
+      {addClientMenu && <div className = "admin-add-client">
+      <h2>Add New Client</h2>
       <form onSubmit={handleCreateClient}>
         <input
           name="name"
-          placeholder="Nom"
           value={formData.name}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="name">(Name)</label>
         <input
           name="lastName"
-          placeholder="Prénom"
           value={formData.lastName}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="lastName">(Surname)</label>
         <input
           name="email"
           type="email"
-          placeholder="Email"
           value={formData.email}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="email">(Email)</label>
         <input
           name="phoneNumber"
-          placeholder="Numéro de téléphone"
           value={formData.phoneNumber}
           onChange={handleCreateChange}
           required
         />
+        <label htmlFor="phoneNumber">(Phone Number)</label>
         <input
           name="birthDate"
           type="date"
@@ -244,14 +199,89 @@ function AdminClient() {
         />
         <input
           name="location"
-          placeholder="Localisation"
           value={formData.location}
           onChange={handleCreateChange}
           required
         />
-        <button type="submit">Ajouter Client</button>
+        <label htmlFor="location">(Location)</label>
+        <div className="admin-client-submit-container"><button type="submit">Save</button></div>
       </form>
-    </>
+      </div>}
+
+
+      {listClients && <> 
+      <h2>List of Clients</h2>
+      <div className = "list-clients-container">
+        {clients.map((client) => (
+          <div className = {`list-clients-background ${editClientId === client.id ? "large" : ""}`} key={client.id}>
+            <div>
+            <p><strong>{client.name} {client.lastName}</strong></p> <p>{client.email}</p>
+            </div>
+            <div className = "client-buttons-container">
+              <button onClick={() => handleEditClient(client)}>{editClientId === client.id ? "Close" : "Edit"}</button>
+              <button onClick={() => handleDeleteClient(client.id)}>
+                Delete
+              </button>
+            </div>
+            {editClientId === client.id && (
+            <div>
+            <form onSubmit={handleUpdateClient}>
+              <h2>
+                Edit client: {editFormData.name}{" "}{editFormData.lastName}
+              </h2>
+              <input
+                name="name"
+                value={editFormData.name}
+                onChange={handleEditChange}
+                required
+              />
+              <label htmlFor="name">(Name)</label>
+              <input
+                name="lastName"
+                value={editFormData.lastName}
+                onChange={handleEditChange}
+                required
+              />
+              <label htmlFor="lastName">(Surname)</label>
+              <input
+                name="email"
+                type="email"
+                value={editFormData.email}
+                onChange={handleEditChange}
+                required
+              />
+              <label htmlFor="email">(Email)</label>
+              <input
+                name="phoneNumber"
+                value={editFormData.phoneNumber}
+                onChange={handleEditChange}
+                required
+              />
+              <label htmlFor="phoneNumber">(Phone Number)</label>
+              <input
+                name="birthDate"
+                type="date"
+                value={editFormData.birthDate}
+                onChange={handleEditChange}
+                required
+              />
+              <label htmlFor="birthDate">(Birth Date)</label>
+              <input
+                name="location"
+                value={editFormData.location}
+                onChange={handleEditChange}
+                required
+              />
+              <label htmlFor="location">(City)</label>
+              <div className="admin-client-submit-container"><button type="submit">Update</button></div>
+          </form>
+        </div>
+      )}
+          </div>
+        ))}
+      </div>
+      </>}  
+    </div>
   );
 }
 

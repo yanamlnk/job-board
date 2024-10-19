@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import "../styles/AdminApplication.css";
 
 function AdminApplication() {
   const [applications, setApplications] = useState([]);
@@ -14,6 +15,10 @@ function AdminApplication() {
     advertisementId: "",
     motivation: "",
   });
+
+  const [addApplicationMenu, setAddApplicationMenu] = useState(false);
+  const [listApplications, setListApplications] = useState(true);
+  const [editApplicationId, setEditApplicationId] = useState(null);
 
   useEffect(() => {
     // Fetch toutes les applications
@@ -75,7 +80,13 @@ function AdminApplication() {
   };
 
   const handleEdit = (application) => {
-    setEditApplication(application); // Remplit le formulaire avec les données de l'application sélectionnée pour modification
+    if (editApplicationId === application.id) {
+      setEditApplicationId(null);
+      // setEditFormData(null);
+    } else {
+      setEditApplication(application); // Remplit le formulaire avec les données de l'application sélectionnée pour modification
+      setEditApplicationId(application.id);
+    }  
   };
 
   const handleUpdate = (e) => {
@@ -98,149 +109,64 @@ function AdminApplication() {
           )
         );
         setEditApplication(null);
+        setEditApplicationId(null);
       })
       .catch((err) => console.error("Erreur lors de la mise à jour:", err));
   };
 
+  const toggleAddApplicationMenu = () => {
+    setAddApplicationMenu(!addApplicationMenu);
+  }
+
+  const toggleListApplications = () => {
+    setListApplications(!listApplications);
+  }
+
   return (
-    <div>
-      <h2>Applications management</h2>
-      <ul>
-        {applications.map((application, i) => (
-          <li key={i}>
-            {application.name} {application.lastName} - {application.adTitle} -{" "}
-            {application.motivation}
-            <button onClick={() => handleDelete(application.id)}>
-              Supprimer
-            </button>
-            <button onClick={() => handleEdit(application)}>Modifier</button>
-          </li>
-        ))}
-      </ul>
+    <div className = "admin-application-container">
+      <h1>Manage Applications</h1>
 
-      {editApplication && (
-        <form onSubmit={handleUpdate}>
-          <h3>Modifier la candidature</h3>
-          <div>
-            <label>Name:</label>
-            <input
-              type="text"
-              value={editApplication.name}
-              onChange={(e) =>
-                setEditApplication({ ...editApplication, name: e.target.value })
-              }
-            />
-          </div>
-          <div>
-            <label>LastName:</label>
-            <input
-              type="text"
-              value={editApplication.lastName}
-              onChange={(e) =>
-                setEditApplication({
-                  ...editApplication,
-                  lastName: e.target.value,
-                })
-              }
-            />
-          </div>
-          <div>
-            <label>Email:</label>
-            <input
-              type="email"
-              value={editApplication.email}
-              onChange={(e) =>
-                setEditApplication({
-                  ...editApplication,
-                  email: e.target.value,
-                })
-              }
-            />
-          </div>
-          <div>
-            <label>PhoneNumber:</label>
-            <input
-              type="text"
-              value={editApplication.phoneNumber}
-              onChange={(e) =>
-                setEditApplication({
-                  ...editApplication,
-                  phoneNumber: e.target.value,
-                })
-              }
-            />
-          </div>
-          <div>
-            <label>Location:</label>
-            <input
-              type="text"
-              value={editApplication.location}
-              onChange={(e) =>
-                setEditApplication({
-                  ...editApplication,
-                  location: e.target.value,
-                })
-              }
-            />
-          </div>
-          <div>
-            <label>Motivation:</label>
-            <textarea
-              value={editApplication.motivation}
-              onChange={(e) =>
-                setEditApplication({
-                  ...editApplication,
-                  motivation: e.target.value,
-                })
-              }
-            />
-          </div>
-          <button type="submit">Sauvegarder les modifications</button>
-        </form>
-      )}
+      <div className = "admin-application-navigation">
+        <button onClick={toggleAddApplicationMenu}>{addApplicationMenu ? "Close Add Menu" : "Add Application"}</button>
+        <button onClick={toggleListApplications}>{listApplications ? "Close List" : "List Applications"}</button>
+      </div>
 
-      <h3>Add an new application</h3>
+      {addApplicationMenu && <div className = "admin-add-application">
+      <h2>Add New Application</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Name:</label>
           <input
             type="text"
+            name="name"
             value={newApplication.name}
             onChange={(e) =>
               setNewApplication({ ...newApplication, name: e.target.value })
             }
             required
           />
-        </div>
-
-        <div>
-          <label>LastName:</label>
+          <label htmlFor="name">(Name)</label>
           <input
             type="text"
+            name="lastName"
             value={newApplication.lastName}
             onChange={(e) =>
               setNewApplication({ ...newApplication, lastName: e.target.value })
             }
             required
           />
-        </div>
-
-        <div>
-          <label>Email:</label>
+          <label htmlFor="lastName">(LastName)</label>
           <input
             type="email"
+            name="email"
             value={newApplication.email}
             onChange={(e) =>
               setNewApplication({ ...newApplication, email: e.target.value })
             }
             required
           />
-        </div>
-
-        <div>
-          <label>PhoneNumber:</label>
+          <label htmlFor="email">(Email)</label>
           <input
             type="text"
+            name="phoneNumber"
             value={newApplication.phoneNumber}
             onChange={(e) =>
               setNewApplication({
@@ -250,22 +176,17 @@ function AdminApplication() {
             }
             required
           />
-        </div>
-
-        <div>
-          <label>Location:</label>
+          <label htmlFor="phoneNumber">(Phone)</label>
           <input
             type="text"
+            name="location"
             value={newApplication.location}
             onChange={(e) =>
               setNewApplication({ ...newApplication, location: e.target.value })
             }
             required
           />
-        </div>
-
-        <div>
-          <label>Advertisement title:</label>
+          <label htmlFor="location">(City)</label>
           <select
             value={newApplication.advertisementId}
             onChange={(e) =>
@@ -275,19 +196,18 @@ function AdminApplication() {
               })
             }
           >
-            <option value="">Select an ad</option>
+            <option value="">Select advertisement</option>
             {advertisements.map((ad) => (
               <option key={ad.id} value={ad.id}>
                 {ad.title}
               </option>
             ))}
           </select>
-        </div>
-
-        <div>
-          <label>Motivation:</label>
+          <label>(Advertisement title)</label>
+          
           <textarea
             value={newApplication.motivation}
+            name="motivation"
             onChange={(e) =>
               setNewApplication({
                 ...newApplication,
@@ -297,10 +217,107 @@ function AdminApplication() {
             rows="5"
             required
           />
-        </div>
+          <label htmlFor="motivation">(Motivation)</label>
 
-        <button type="submit">Create</button>
+          <div className="admin-advertisement-submit-container"><button type="submit">Add</button></div>
       </form>
+      </div>}
+
+      {listApplications && <>
+      <h2>List of Applications</h2>
+      <div className = "list-applications-container">
+        {applications.map((application) => (
+          <div className = {`list-advertisements-background ${editApplicationId === application.id ? "large" : ""}`} key={application.id}>
+            <div>
+              <p>{application.name} {application.lastName}</p>  <p>{application.adTitle}</p>
+              <p>{application.motivation}</p>
+            </div>
+            <div className = "application-buttons-container">
+            <button onClick={() => handleEdit(application)}>{editApplicationId === application.id ? "Close" : "Edit"}</button>
+            <button onClick={() => handleDelete(application.id)}>
+              Delete
+            </button>
+            </div>
+
+            {editApplicationId === application.id && (
+              <div>
+                <h2>Edit Application</h2>
+                <form onSubmit={handleUpdate}>
+                  <input
+                    type="text"
+                    name="name"
+                    value={editApplication.name}
+                    onChange={(e) =>
+                      setEditApplication({ ...editApplication, name: e.target.value })
+                    }
+                  />
+                  <label htmlFor="name">(Name)</label>
+                  <input
+                    type="text"
+                    name="lastName"
+                    value={editApplication.lastName}
+                    onChange={(e) =>
+                      setEditApplication({
+                        ...editApplication,
+                        lastName: e.target.value,
+                      })
+                    }
+                  />
+                  <label htmlFor="lastName">(Surname)</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={editApplication.email}
+                    onChange={(e) =>
+                      setEditApplication({
+                        ...editApplication,
+                        email: e.target.value,
+                      })
+                    }
+                  />
+                  <label htmlFor="email">(Email)</label>
+                  <input
+                    type="text"
+                    name="phoneNumber"
+                    value={editApplication.phoneNumber}
+                    onChange={(e) =>
+                      setEditApplication({
+                        ...editApplication,
+                        phoneNumber: e.target.value,
+                      })
+                    }
+                  />
+                  <label htmlFor="phoneNumber">(Phone)</label>
+                  <input
+                    type="text"
+                    name="location"
+                    value={editApplication.location}
+                    onChange={(e) =>
+                      setEditApplication({
+                        ...editApplication,
+                        location: e.target.value,
+                      })
+                    }
+                  />
+                  <label htmlFor="location">(City)</label>
+                  <textarea
+                    value={editApplication.motivation}
+                    onChange={(e) =>
+                      setEditApplication({
+                        ...editApplication,
+                        motivation: e.target.value,
+                      })
+                    }
+                  />
+                  <label htmlFor="motivation">(Motivation)</label>
+                  <div className="admin-application-submit-container"><button type="submit">Update</button></div>
+              </form>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+      </>}
     </div>
   );
 }

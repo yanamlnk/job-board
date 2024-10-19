@@ -42,12 +42,13 @@ function Login() {
         <button onClick={() => handleLogInActive(false)}>Sign Up</button>
         <button onClick={handleHomeReturn}>Home</button>
       </div>
-      {logInActive ? (
-        <SignInForm handleLogInActive={handleLogInActive} />
-      ) : (
-        <SignUpForm handleLogInActive={handleLogInActive} />
-      )}
-      <img src={car} alt="car" className="car-icon" />
+      <div className={`component-container ${logInActive ? 'active' : ''}`}>
+        {logInActive && <SignInForm handleLogInActive={handleLogInActive} />}
+      </div>
+      <div className={`component-container ${!logInActive ? 'active' : ''}`}>
+        {!logInActive && <SignUpForm handleLogInActive={handleLogInActive} />}
+      </div>
+      <img src={car} alt="car" className="car-icon"/>
     </div>
   );
 }

@@ -80,10 +80,19 @@ function Admin() {
         <button onClick={handleAdvertisementsActive}>Advertisements</button>
         <button onClick={handleApplicationsActive}>Applications</button>
       </div>
-      {companiesActive && <AdminCompany />}
-      {advertisementsActive && <AdminAdvertisement />}
-      {clientsActive && <AdminClient />}
-      {applicationsActive && <AdminApplication />}
+      <div className="red-line"></div>
+      <div className={`component-container ${companiesActive ? 'active' : ''}`}>
+        {companiesActive && <AdminCompany />}
+      </div>
+      <div className={`component-container ${advertisementsActive ? 'active' : ''}`}>
+        {advertisementsActive && <AdminAdvertisement />}
+      </div>
+      <div className={`component-container ${clientsActive ? 'active' : ''}`}>
+        {clientsActive && <AdminClient />}
+      </div>
+      <div className={`component-container ${applicationsActive ? 'active' : ''}`}>
+        {applicationsActive && <AdminApplication />}
+      </div>
     </div>
   );
 }

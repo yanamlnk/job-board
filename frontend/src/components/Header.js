@@ -20,26 +20,29 @@ const Header = () => {
           authorization: `Bearer ${token}`,
         },
       })
-        .then((response) => {
-          console.log(response);
-          if (response.ok) {
-            setIsAdmin(true);
-          } else {
-            fetch("http://localhost:3001/api/client/Client", {
-              method: "GET",
-              headers: {
-                authorization: `Bearer ${token}`,
-              },
-            })
-              .then((response) => response.json())
-              .then((data) => setUserData(data))
-              .catch((error) => console.error("Erreur:", error));
+      .then((response) => {
+        if (response.ok) {
+          setIsAdmin(true);
+        }
+      })
+      .catch((error) => {
+          console.error("Somethign went wrong:", error);
+      });
+
+      fetch("http://localhost:3001/api/client/Client", {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data) {
+            setUserData(data);
           }
         })
-        .catch((error) => {
-          console.error("Somethign went wrong:", error);
-        });
-    }
+        .catch((error) => console.error("Erreur:", error)); 
+    }  
   }, []);
 
   const navigate = useNavigate();

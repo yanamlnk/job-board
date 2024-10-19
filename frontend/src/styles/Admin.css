@@ -19,6 +19,6 @@
     margin-top: 20px;
     }
     
-    .admin-buttons-navigation button:hover {
+.admin-buttons-navigation button:hover {
     border-bottom: 1px solid black;
 }
