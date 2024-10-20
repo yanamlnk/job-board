@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Importer useNavigate pour la redirection
+import { useNavigate } from "react-router-dom";
 import "../styles/SignIn.css";
 
-function SignInForm({handleLogInActive}) {
+function SignInForm({ handleLogInActive }) {
   const [signInData, setSignInData] = useState({
     email: "",
     password: "",
   });
 
-  const navigate = useNavigate(); // Initialiser useNavigate pour la redirection
+  const navigate = useNavigate();
 
   const [error, setError] = useState("");
 
@@ -22,11 +22,18 @@ function SignInForm({handleLogInActive}) {
 
   const errorMessage = (message) => {
     if (message === "User not found.") {
-      return <p>{message} Please <a href="#" onClick={() => handleLogInActive(false)}>sign up.</a></p>
+      return (
+        <p>
+          {message} Please{" "}
+          <a href="#" onClick={() => handleLogInActive(false)}>
+            sign up.
+          </a>
+        </p>
+      );
     } else {
-      return <p>{message}</p>
+      return <p>{message}</p>;
     }
-  }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,7 +49,7 @@ function SignInForm({handleLogInActive}) {
       .then((response) => {
         if (!response.ok) {
           if (response.status === 404) {
-            return handleClientSignIn(); // Passer à la vérification client
+            return handleClientSignIn();
           }
           throw new Error("Erreur lors de la connexion admin");
         }
@@ -98,7 +105,7 @@ function SignInForm({handleLogInActive}) {
   };
 
   return (
-    <div className = "signin-form">
+    <div className="signin-form">
       <form className={"loginForm"} onSubmit={handleSubmit}>
         <h2>Log In</h2>
         <input
@@ -117,7 +124,9 @@ function SignInForm({handleLogInActive}) {
           required
         />
         <label htmlFor="password">(Password)</label>
-        <div className = "login-submit-container"><button type="submit">Log In</button></div>
+        <div className="login-submit-container">
+          <button type="submit">Log In</button>
+        </div>
         {error && errorMessage(error)}
       </form>
     </div>
