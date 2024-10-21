@@ -152,7 +152,7 @@ router.post("/sendApplication", (req, res) => {
     // Contenu de l'email avec les informations du client et de l'annonce
     const mailOptions = {
       from: "jobs.epitech@gmail.com",
-      to: "axelh33@hotmail.fr",
+      to: "youremail@mail.com",
       subject: "Nouvelle Candidature",
       text: `
         Un client a postulé à une offre d'emploi.
