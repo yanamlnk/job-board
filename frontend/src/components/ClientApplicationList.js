@@ -19,18 +19,25 @@ function ClientApplicationList() {
           setApplications(data);
         })
         .catch((error) => {
-          console.error("Erreur lors de la récupération des candidatures :", error);
+          console.error(
+            "Erreur lors de la récupération des candidatures :",
+            error
+          );
         });
     }
   }, []);
 
   return (
-    <div className = "client-application">
+    <div className="client-application">
       <h1>My Applications</h1>
-      {applications.length === 0 && <p style={{textAlign:"center"}}>You don't have any applications yet.</p>}
+      {applications.length === 0 && (
+        <p style={{ textAlign: "center" }}>
+          You don't have any applications yet.
+        </p>
+      )}
       <ul>
-        {applications.map((application) => (
-          <li key={application.id}>
+        {applications.map((application, i) => (
+          <li key={i}>
             <h2>{application.title}</h2>
             <p>Entreprise: {application.companyName}</p>
             <p>Localisation: {application.location}</p>

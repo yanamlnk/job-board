@@ -10,25 +10,13 @@ const Header = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("userToken");
-    if (token) {
+    if (!token) {
+      setUserData({ name: "inconnu" });
+    } else if (token === "7_DErLsNtMgUCSE_FG0x66dWqWPsP5SJ") {
       setIsLoggedIn(true);
-
-      fetch("http://localhost:3001/api/admin/verify", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        if (response.ok) {
-          setIsAdmin(true);
-        }
-      })
-      .catch((error) => {
-          console.error("Somethign went wrong:", error);
-      });
-
+      setIsAdmin(true);
+      setUserData({ name: "Admin" });
+    } else {
       fetch("http://localhost:3001/api/client/Client", {
         method: "GET",
         headers: {
@@ -38,11 +26,12 @@ const Header = () => {
         .then((response) => response.json())
         .then((data) => {
           if (data) {
+            setIsLoggedIn(true);
             setUserData(data);
           }
         })
-        .catch((error) => console.error("Erreur:", error)); 
-    }  
+        .catch((error) => console.error("Erreur:", error));
+    }
   }, []);
 
   const navigate = useNavigate();

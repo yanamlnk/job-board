@@ -6,7 +6,7 @@ The frontend is built using **React**, while the backend is built using **Node.j
 
 ### Navigation:
 1. [Frontend](#frontend)
-    - [Technologies](#technologies-1)
+    - [Technologies](#technologies)
     - [Directory Structure](#directory-structure)
     - [UI Overview](#ui-overview)
     - [Routing Details](#routing-details)
@@ -16,7 +16,7 @@ The frontend is built using **React**, while the backend is built using **Node.j
     - [Endpoints](#endpoints)
 3. [Package Management](#package-management)
 4. [Database](#database)
-    - [Technologies](#technologies-2)
+    - [Technologies](#technologies-1)
     - [Tables](#tables)
 5. [Running the Project](#running-the-project)
 

@@ -14,7 +14,10 @@ function Home() {
       .then((data) => setAdsData(data))
       .catch((error) => console.error("Erreur:", error));
 
-    const token = localStorage.getItem('userToken');
+    const token = localStorage.getItem("userToken");
+    if (token === "7_DErLsNtMgUCSE_FG0x66dWqWPsP5SJ") {
+      return;
+    }
     if (token) {
       fetch("http://localhost:3001/api/client/Client", {
         method: "GET",
@@ -24,8 +27,8 @@ function Home() {
       })
         .then((response) => response.json())
         .then((data) => setUserData(data))
-        .catch((error) => console.error("Erreur:", error)); 
-    }  
+        .catch((error) => console.error("Erreur:", error));
+    }
   }, []);
 
   const ads = adsData.map((data, i) => {
@@ -46,7 +49,7 @@ function Home() {
   });
   return (
     <div className="home">
-      <Header/>
+      <Header />
       <div className="container_advertisements">{ads}</div>
       <Footer />
     </div>
